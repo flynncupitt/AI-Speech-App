@@ -23,6 +23,8 @@ This web application is designed to help users improve their speech skills throu
   - GitHub: [jsn-nz](https://github.com/jsn-nz)
 - Dan Vann
   - Github: [DanVann123] (https://github.com/DanVann123)
+- **Azmaan Din**
+  - GitHub: [Aquitaine24](https://github.com/aquitain24)
 
 
 ## License
