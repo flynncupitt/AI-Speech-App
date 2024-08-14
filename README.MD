@@ -21,7 +21,7 @@ This web application is designed to help users improve their speech skills throu
 ## Team members
 - **Jason Duong**
   - GitHub: [jsn-nz](https://github.com/jsn-nz)
-- **Dan Vann
+- Dan Vann
   - Github: [DanVann123] (https://github.com/DanVann123)
 
 
