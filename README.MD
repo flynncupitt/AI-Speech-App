@@ -14,12 +14,12 @@ This web application is designed to help users improve their speech skills throu
 
 ## Technologies Used
 
-- React JS version: 18.2.0
-- Firebase Auth version: 23.0.0
-- Tail Wind version: version: 3.4
-- React-audio-voice-recorder version: 2.2.0
-- ONNX version: 1.16.2
-- Hugging Face version: 4.44.0
+- React JS _version: 18.2.0_
+- Firebase Auth _version: 23.0.0_
+- Tail Wind _version: 3.4_
+- React-audio-voice-recorder _version: 2.2.0_
+- ONNX _version: 1.16.2_
+- Hugging Face _version: 4.44.0_
 
 ## Team members
 
