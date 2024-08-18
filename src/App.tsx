@@ -5,7 +5,7 @@ import "./App.css";
 import { initializeApp } from "firebase/app";
 import { config } from "./config/config";
 
-initializeApp(config.firebaseConfig);
+//initializeApp(config.firebaseConfig);
 
 function App() {
   const [count, setCount] = useState(0);
