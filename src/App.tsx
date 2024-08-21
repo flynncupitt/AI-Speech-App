@@ -4,6 +4,8 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { initializeApp } from "firebase/app";
 import { config } from "./config/config";
+import AudioRecorder from "./components/AudioRecorder";
+import RecordSubmitAudioPage from "./pages/RecordSubmitAudioPage";
 
 //initializeApp(config.firebaseConfig);
 
@@ -12,7 +14,7 @@ function App() {
 
   return (
     <>
-      <div>
+      {/* <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -31,7 +33,9 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-      </p>
+      </p> */}
+      <RecordSubmitAudioPage></RecordSubmitAudioPage>
+      
     </>
   );
 }
