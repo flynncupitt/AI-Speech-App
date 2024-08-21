@@ -2,11 +2,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
-require('dotenv').config();
 
 
 const firebaseConfig = {
-        apiKey: process.env.API_KEY,
+        apiKey: import.meta.env.VITE_API_KEY,
         authDomain: "ai-speech-app-82a66.firebaseapp.com",
         projectId: "ai-speech-app-82a66",
         storageBucket: "ai-speech-app-82a66.appspot.com",
