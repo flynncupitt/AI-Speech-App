@@ -1,46 +1,32 @@
 import React, { useState } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../config/firebaseconfig"; // Import Firebase storage instance
+import { uploadFileToFirebase } from "../utils/firebaseupload"; // Import the function
 
-const FileUploader: React.FC = () => {
+const SomePage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [downloadURL, setDownloadURL] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
-  // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
 
-  // Handle file upload to Firebase Storage
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
       alert("Please select a file first.");
       return;
     }
 
-    const storageRef = ref(storage, `uploads/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-      },
-      (error) => {
-        console.error("Upload failed:", error);
-      },
-      async () => {
-        // Get the download URL after the upload completes
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        setDownloadURL(url);
-        alert("File uploaded successfully!");
-      }
-    );
+    try {
+      const url = await uploadFileToFirebase(file, (progress) => {
+        setUploadProgress(progress); // Update progress state
+      });
+      setDownloadURL(url); // Store the download URL
+      alert("File uploaded successfully!");
+    } catch (error) {
+      console.error("File upload failed:", error);
+    }
   };
 
   return (
@@ -52,8 +38,6 @@ const FileUploader: React.FC = () => {
       >
         Upload File
       </button>
-
-      {uploadProgress > 0 && <p>Upload progress: {uploadProgress}%</p>}
 
       {downloadURL && (
         <p>
@@ -67,4 +51,4 @@ const FileUploader: React.FC = () => {
   );
 };
 
-export default FileUploader;
+export default SomePage;
