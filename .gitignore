@@ -25,3 +25,5 @@ dist-ssr
 
 #api
 .env
+.DS_Store
+Mockup Images/.DS_Store
