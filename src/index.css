@@ -27,12 +27,14 @@ a:hover {
 }
 
 body {
+  background-color: #1a1a1a; /* Match the color with your hero section */
+  color: white; /* Ensure text is visible on the dark background */
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  flex-direction: column;
   min-height: 100vh;
 }
+
 
 h1 {
   font-size: 3.2em;
