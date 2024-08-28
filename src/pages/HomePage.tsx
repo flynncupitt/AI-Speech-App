@@ -1,14 +1,17 @@
-import React from "react";
+import NavBar from "../components/navbar.tsx";
+import "bootstrap/dist/css/bootstrap.css";
 import imagePath from "../assets/app-logo.png";
 
-export default function HomePage() {
+function HomePage() {
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
-      {/* <NavBar
+    <div
+      style={{ backgroundColor: "#1a1a1a", minHeight: "100vh", color: "white" }}
+    >
+      <NavBar
         brandName="AI Speech Clarity"
         imageSrcPath={imagePath}
         navItems={["Home", "About Us"]}
-      /> */}
+      />
       <section className="hero-section py-32 flex items-center justify-center">
         <div className="container mx-auto flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
           <div className="md:w-1/2 order-2 md:order-1 text-center md:text-left space-y-6">
@@ -23,14 +26,14 @@ export default function HomePage() {
             </p>
             <div className="flex justify-center md:justify-start space-x-6">
               <a
-                href="/record"
-                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+                href="/register"
+                className="btn btn-primary px-6 py-3 text-lg font-semibold"
               >
                 Get Started
               </a>
               <a
-                href="/test-page"
-                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+                href="/record"
+                className="btn btn-secondary px-6 py-3 text-lg font-semibold"
               >
                 Learn More
               </a>
@@ -48,3 +51,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+export default HomePage;
