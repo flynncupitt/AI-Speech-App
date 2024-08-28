@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TestPage from "./pages/TestPage";
 import HomePage from "./pages/HomePage";
+import RecordSubmitPage from "./pages/RecordSubmitAudio";
 
 import "./App.css";
 
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/test-page" element={<TestPage />}></Route>
         <Route path="/" element={<HomePage />}></Route>
+        <Route path="/record" element={<RecordSubmitPage />}></Route>
       </Routes>
     </Router>
   );

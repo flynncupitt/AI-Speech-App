@@ -23,13 +23,13 @@ export default function HomePage() {
             </p>
             <div className="flex justify-center md:justify-start space-x-6">
               <a
-                href="/test-page"
+                href="/record"
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
                 Get Started
               </a>
               <a
-                href="/learn-more"
+                href="/test-page"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
                 Learn More
