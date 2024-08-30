@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import RecordingStopwatch from "../components/RecordingStopwatch";
-import NavBar from "../components/NavBar";
 
 export default function RecordSubmitAudioPage() {
   const [recordedUrl, setRecordedUrl] = useState("");
