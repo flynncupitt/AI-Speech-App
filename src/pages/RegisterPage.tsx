@@ -40,7 +40,7 @@ const SignUpPage: React.FC = () => {
       console.log("User signed up and profile updated:", user);
 
       // Redirect to the main page after successful sign-up and login
-      navigate("/main");
+      navigate("/record");
     } catch (error: any) {
       console.error("Sign up error:", error.message);
       alert("Sign up failed: " + error.message);

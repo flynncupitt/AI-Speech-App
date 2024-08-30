@@ -23,7 +23,7 @@ const SignInPage: React.FC = () => {
       console.log("User signed in:", user);
 
       // Redirect to the main page after successful login
-      navigate("/main");
+      navigate("/record");
     } catch (error: any) {
       console.error("Sign in error:", error.message);
       alert("Sign in failed: " + error.message);
@@ -86,7 +86,7 @@ const SignInPage: React.FC = () => {
 
         <p className="text-sm text-center text-gray-500 mt-4">
           Don't have an account?{" "}
-          <a href="/signup" className="text-purple-500 hover:underline">
+          <a href="/register" className="text-purple-500 hover:underline">
             Sign Up
           </a>
         </p>
