@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import RecordingStopwatch from "../components/RecordingStopwatch";
 import { uploadFileToFirebase } from "../utils/firebaseupload";
+import { firestore } from "../config/firebaseconfig"; // Import Firestore instance
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { auth } from "../config/firebaseconfig"; // Import Firebase auth instance
 
 export default function RecordSubmitAudioPage() {
   const [recordedUrl, setRecordedUrl] = useState("");
@@ -8,6 +11,8 @@ export default function RecordSubmitAudioPage() {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -44,8 +49,30 @@ export default function RecordSubmitAudioPage() {
           const downloadURL = await uploadFileToFirebase(file, (progress) => {
             setUploadProgress(progress);
           });
-          alert("File uploaded successfully!");
-          console.log("Uploaded file available at:", downloadURL);
+          setDownloadURL(downloadURL); // Store the download URL
+
+          // Save the recording metadata in Firestore under the user's document
+          const user = auth.currentUser; // Get the currently logged-in user
+          if (user) {
+            const recordingsRef = collection(
+              firestore,
+              "users",
+              user.uid,
+              "recordings"
+            );
+            await addDoc(recordingsRef, {
+              downloadURL: downloadURL,
+              filename: randomFileName,
+              createdAt: serverTimestamp(),
+              size: file.size,
+              contentType: file.type,
+            });
+            alert("File uploaded and metadata saved successfully!");
+            console.log("Uploaded file available at:", downloadURL);
+          } else {
+            console.error("No user is currently logged in.");
+            alert("You must be logged in to save recordings.");
+          }
         } catch (error) {
           console.error("File upload failed:", error);
           alert("Upload failed, please try again.");
@@ -58,6 +85,7 @@ export default function RecordSubmitAudioPage() {
       console.error("Error accessing microphone:", error);
     }
   };
+
   const stopRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
       mediaRecorder.current.stop();
