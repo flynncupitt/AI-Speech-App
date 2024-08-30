@@ -1,8 +1,9 @@
-import React from "react";
+import NavBar from "../components/navbar.tsx";
+import "bootstrap/dist/css/bootstrap.css";
 import imagePath from "../assets/app-logo.png";
 import NavBar from "../components/NavBar";
 
-export default function HomePage() {
+function HomePage() {
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <NavBar
@@ -26,6 +27,8 @@ export default function HomePage() {
               <a
                 href="/register"
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+                href="/register"
+                className="btn btn-primary px-6 py-3 text-lg font-semibold"
               >
                 Register Page
               </a>
@@ -55,3 +58,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+export default HomePage;
