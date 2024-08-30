@@ -41,6 +41,12 @@ export default function HomePage() {
               >
                 Record Page
               </a>
+              <a
+                href="/recordings"
+                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+              >
+                Recordings Page
+              </a>
             </div>
           </div>
           <div className="md:w-1/2 order-1 md:order-2 text-center">
