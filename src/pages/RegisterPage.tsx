@@ -2,6 +2,37 @@ import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../config/firebaseconfig.ts';  
 
+export default function SignUpPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: name,
+      });
+
+      console.log("User signed up and profile updated:", user);
+
+      window.location.href = 'main.html';
+    } catch (error) {
+      console.error("Sign up error:");
+      alert("Sign up failed: ");
+    }
+  };
+
   return (
     <div className="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-6">
       <div className="w-full max-w-sm bg-gray-800 p-8 rounded-lg shadow-lg">
