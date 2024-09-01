@@ -5,7 +5,8 @@ import { getStorage } from 'firebase/storage';
 
 
 const firebaseConfig = {
-        apiKey: import.meta.env.VITE_API_KEY,
+        // apiKey: import.meta.env.VITE_API_KEY,
+        apiKey: "AIzaSyAu9fX-bfOdtdT_IRhCyKGcwct7ZWnrdEI",
         authDomain: "ai-speech-app-82a66.firebaseapp.com",
         projectId: "ai-speech-app-82a66",
         storageBucket: "ai-speech-app-82a66.appspot.com",
