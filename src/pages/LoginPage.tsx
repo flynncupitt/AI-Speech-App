@@ -2,6 +2,25 @@ import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebaseconfig'; 
 
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignIn = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User signed in:", user);
+
+      // Redirect to main page
+      window.location.href = 'main.html';
+    } catch (error) {
+      console.error("Sign in error:");
+      alert("Sign in failed: ");
+    }
+  };
+
   return (
     <div className="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-6">
       <div className="w-full max-w-sm bg-gray-800 p-8 rounded-lg shadow-lg">
