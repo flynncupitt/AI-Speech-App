@@ -31,7 +31,7 @@ const SignInPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="bg-gray-900 w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
       <div className="w-full max-w-sm bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-white mb-6">
           Sign In
