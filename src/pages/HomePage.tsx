@@ -1,6 +1,6 @@
 import React from "react";
 import imagePath from "../assets/app-logo.png";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar.tsx";
 
 export default function HomePage() {
   return (
@@ -40,6 +40,12 @@ export default function HomePage() {
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
                 Record Page
+              </a>
+              <a
+                href="/recordings"
+                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+              >
+                Recordings Page
               </a>
             </div>
           </div>

@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import RecordSubmitPage from "./pages/RecordSubmitAudio";
+import RecordSubmitPage from "./pages/RecordSubmitAudioPage";
 
 import "./App.css";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import RecordingsPage from "./pages/RecordingsPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/record" element={<RecordSubmitPage />}></Route>
+        <Route path="/recordings" element={<RecordingsPage />}></Route>
       </Routes>
     </Router>
   );

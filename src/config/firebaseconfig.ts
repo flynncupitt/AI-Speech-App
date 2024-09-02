@@ -1,12 +1,23 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
+import { getFirestore } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+
+/* const [apiKey, setApiKey] = useState<string | null>(null);
+useEffect(() => {
+        // Fetch the API key from the backend
+        fetch('http://localhost:5000/api/key')
+          .then((response) => response.json())
+          .then((data) => setApiKey(data.apiKey))
+          .catch((error) => console.error('Error fetching API key:', error));
+      }, []); */
 
 
 
 const firebaseConfig = {
-        // apiKey: import.meta.env.VITE_API_KEY,
-        apiKey: "AIzaSyAu9fX-bfOdtdT_IRhCyKGcwct7ZWnrdEI",
+        apiKey: import.meta.env.VITE_API_KEY,
+        //apiKey: apiKey},
         authDomain: "ai-speech-app-82a66.firebaseapp.com",
         projectId: "ai-speech-app-82a66",
         storageBucket: "ai-speech-app-82a66.appspot.com",
@@ -20,3 +31,4 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+export const firestore = getFirestore(app);

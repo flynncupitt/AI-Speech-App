@@ -1,45 +1,67 @@
-import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../config/firebaseconfig.ts';  
+import React, { useState } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../config/firebaseconfig"; // Adjust the path as needed
 
-export default function SignUpPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+const SignUpPage: React.FC = () => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const navigate = useNavigate(); // Use this hook to navigate after sign-up
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission behavior
 
+    // Basic validation
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      alert("Passwords do not match");
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
+      // Update the user's profile with their name
       await updateProfile(user, {
         displayName: name,
       });
 
       console.log("User signed up and profile updated:", user);
 
-      window.location.href = 'main.html';
-    } catch (error) {
-      console.error("Sign up error:");
-      alert("Sign up failed: ");
+      // Redirect to the main page after successful sign-up and login
+      navigate("/");
+    } catch (error: any) {
+      console.error("Sign up error:", error.message);
+      alert("Sign up failed: " + error.message);
     }
   };
 
   return (
     <div className="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-6">
       <div className="w-full max-w-sm bg-gray-800 p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-white mb-6">Sign Up</h2>
-        <form id="signup-form" className="space-y-4" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold text-center text-white mb-6">
+          Sign Up
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Name
+            </label>
             <input
               type="text"
               id="name"
@@ -53,7 +75,12 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -67,7 +94,12 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Password
+            </label>
             <input
               type="password"
               id="password"
@@ -81,7 +113,12 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label htmlFor="password-confirmation" className="block text-sm font-medium text-gray-300">Confirm Password</label>
+            <label
+              htmlFor="password-confirmation"
+              className="block text-sm font-medium text-gray-300"
+            >
+              Confirm Password
+            </label>
             <input
               type="password"
               id="password-confirmation"
@@ -94,14 +131,23 @@ export default function SignUpPage() {
             />
           </div>
 
-          <button type="submit" className="w-full py-2 bg-purple-500 rounded-lg text-white text-lg hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400">
+          <button
+            type="submit"
+            className="w-full py-2 bg-purple-500 rounded-lg text-white text-lg hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400"
+          >
             Sign Up
           </button>
         </form>
+
         <p className="text-sm text-center text-gray-500 mt-4">
-          Already have an account? <a href="/login" className="text-purple-500 hover:underline">Sign In</a>
+          Already have an account?{" "}
+          <a href="/signin" className="text-purple-500 hover:underline">
+            Sign In
+          </a>
         </p>
       </div>
     </div>
   );
-}
+};
+
+export default SignUpPage;

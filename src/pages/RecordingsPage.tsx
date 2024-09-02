@@ -1,0 +1,79 @@
+import React, { useState, useEffect } from "react";
+import { firestore } from "../config/firebaseconfig"; // Your Firestore instance
+import { collection, getDocs } from "firebase/firestore";
+import { auth } from "../config/firebaseconfig"; // Firebase auth instance
+import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom"; // For redirecting if not authenticated
+
+const UserRecordings: React.FC = () => {
+  const [recordings, setRecordings] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // To manage loading state
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const recordingsRef = collection(
+            firestore,
+            "users",
+            user.uid,
+            "recordings"
+          );
+          const snapshot = await getDocs(recordingsRef);
+
+          const recordingsList = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setRecordings(recordingsList);
+        } catch (error) {
+          console.error("Error fetching recordings:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        console.log("No user is logged in.");
+        navigate("/signin"); // Redirect to sign-in page if no user is logged in
+      }
+    });
+
+    // Cleanup the subscription on unmount
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (loading) {
+    return <div>Loading recordings...</div>; // Loading state
+  }
+
+  return (
+    <div className="p-4">
+      <h2 className="text-2xl mb-4">My Recordings</h2>
+      <ul>
+        {recordings.length > 0 ? (
+          recordings.map((recording) => (
+            <li key={recording.id} className="mb-2">
+              <a
+                href={recording.downloadURL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {recording.filename}
+              </a>{" "}
+              (Uploaded on:{" "}
+              {new Date(
+                recording.createdAt.seconds * 1000
+              ).toLocaleDateString()}
+              )
+            </li>
+          ))
+        ) : (
+          <p>No recordings found.</p>
+        )}
+      </ul>
+    </div>
+  );
+};
+
+export default UserRecordings;
