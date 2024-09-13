@@ -4,9 +4,15 @@ interface NavBarProps {
   brandName: string;
   imageSrcPath: string;
   navItems: string[];
+  showAuthButtons?: boolean;
 }
 
-function NavBar({ brandName, imageSrcPath, navItems }: NavBarProps) {
+function NavBar({
+  brandName,
+  imageSrcPath,
+  navItems,
+  showAuthButtons = true,
+}: NavBarProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,22 +69,24 @@ function NavBar({ brandName, imageSrcPath, navItems }: NavBarProps) {
               </li>
             ))}
           </ul>
-          <div className="flex space-x-3 mt-3 md:mt-0">
-            <a href="#login" className="btn btn-outline-light me-3">
-              <a
-                href="#login"
-                className="border border-white text-white py-1 px-3 rounded hover:bg-white hover:text-gray-800 transition"
-              >
-                Login
+          {showAuthButtons && (
+            <div className="flex space-x-3 mt-3 md:mt-0">
+              <a href="#login" className="btn btn-outline-light me-3">
+                <a
+                  href="#login"
+                  className="border border-white text-white py-1 px-3 rounded hover:bg-white hover:text-gray-800 transition"
+                >
+                  Login
+                </a>
+                <a
+                  href="#register"
+                  className="bg-white text-gray-800 py-1 px-3 rounded hover:bg-gray-300 transition"
+                >
+                  Register
+                </a>
               </a>
-              <a
-                href="#register"
-                className="bg-white text-gray-800 py-1 px-3 rounded hover:bg-gray-300 transition"
-              >
-                Register
-              </a>
-            </a>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </nav>

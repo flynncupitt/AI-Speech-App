@@ -6,6 +6,7 @@ import "./App.css";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import RecordingsPage from "./pages/RecordingsPage";
+import GoalTrackerPage from "./pages/GoalTrackerPage";
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
         */}
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/" element={<HomePage />}></Route>
+        <Route path="/home" element={<HomePage />}></Route>
         <Route path="/record" element={<RecordSubmitPage />}></Route>
         <Route path="/recordings" element={<RecordingsPage />}></Route>
+        <Route path="/goal-tracker" element={<GoalTrackerPage />}></Route>
       </Routes>
     </Router>
   );

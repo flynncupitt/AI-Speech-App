@@ -9,6 +9,7 @@ export default function HomePage() {
         brandName="AI Speech Clarity"
         imageSrcPath={imagePath}
         navItems={["Home"]}
+        showAuthButtons={true}
       />
       <section className="hero-section py-32 px-6 flex items-center justify-center">
         <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
