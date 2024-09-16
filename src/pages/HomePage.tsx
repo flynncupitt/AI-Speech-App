@@ -27,25 +27,31 @@ export default function HomePage() {
                 href="/register"
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Register Page
+                Register
               </a>
               <a
                 href="/login"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Login Page
+                Login
               </a>
               <a
                 href="/record"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Record Page
+                Record
               </a>
               <a
                 href="/recordings"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Recordings Page
+                Recordings
+              </a>
+              <a
+                href="/tutorial"
+                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+              >
+                Tutorial
               </a>
             </div>
           </div>
