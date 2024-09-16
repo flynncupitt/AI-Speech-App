@@ -7,10 +7,13 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import RecordingsPage from "./pages/RecordingsPage";
 import { TutorialPage } from "./pages/TutorialPage";
+import { UserDashboard } from "./pages/UserDashboard";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <Router>
+      <Layout>
       <Routes>
         {/* If you need to make a new route:
         - Set the path to whatever you want it to be e.g /path-name
@@ -23,7 +26,9 @@ function App() {
         <Route path="/record" element={<RecordSubmitPage />}></Route>
         <Route path="/recordings" element={<RecordingsPage />}></Route>
         <Route path="/tutorial" element={<TutorialPage />}></Route>
+        <Route path="/dashboard" element={<UserDashboard />}></Route>
       </Routes>
+      </Layout>
     </Router>
   );
 }
