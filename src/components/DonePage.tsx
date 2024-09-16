@@ -16,7 +16,9 @@ interface DonePageProps {
 
 const DonePage: React.FC<DonePageProps> = ({ doneGoals }) => {
   return (
-    <div className="p-4">
+    <div className="p-4 w-full flex-grow">
+      {" "}
+      {/* Added w-full flex-grow */}
       {doneGoals.length > 0 ? (
         doneGoals.map((goal, index) => (
           <Goal key={index} goal={goal} onComplete={() => {}} />

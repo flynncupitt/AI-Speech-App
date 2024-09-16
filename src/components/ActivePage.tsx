@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Goal from "./Goal";
 
 interface GoalType {
@@ -31,9 +31,23 @@ const ActivePage: React.FC<ActivePageProps> = ({
   const [message, setMessage] = useState(""); // State to show error message
   const [successMessage, setSuccessMessage] = useState(""); // State for success message outside the modal
 
+  const [charCount, setCharCount] = useState(0); // Character count for the description
+  const maxChars = 200; // Maximum character limit
+
   // Clear the error message when the user starts typing or closes the modal
   const clearMessage = () => {
     setMessage("");
+  };
+
+  // Handle description input and character limit
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const input = e.target.value;
+    if (input.length <= maxChars) {
+      setNewGoal({ ...newGoal, description: input });
+      setCharCount(input.length);
+    }
   };
 
   const handleAddTask = () => {
@@ -66,6 +80,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
     setIsModalOpen(false); // Close modal after submitting
     setNewGoal({ title: "", description: "", tasks: [""] });
     setTasks([""]); // Reset tasks
+    setCharCount(0); // Reset the character count
     setSuccessMessage("Goal added successfully!"); // Show success message
 
     // Clear success message after a few seconds
@@ -74,8 +89,14 @@ const ActivePage: React.FC<ActivePageProps> = ({
     }, 3000);
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setCharCount(0); // Reset character count when modal is closed
+    clearMessage(); // Clear any error message
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 w-full flex-grow">
       {/* Success popup outside the modal */}
       {successMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white p-2 rounded shadow-md z-50">
@@ -86,7 +107,10 @@ const ActivePage: React.FC<ActivePageProps> = ({
       {/* Add Goal Button */}
       <div
         className="text-blue-500 cursor-pointer mb-4"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          setCharCount(0); // Reset charCount when opening the modal
+        }}
       >
         + Add a goal
       </div>
@@ -99,7 +123,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
       {/* Modal for Adding a Goal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-gray-800 p-4 rounded-lg w-96">
+          <div className="bg-gray-800 p-4 rounded-lg w-full max-w-lg">
             <h3 className="text-xl font-bold mb-4">Add a New Goal</h3>
 
             {/* Error message inside the modal */}
@@ -119,15 +143,18 @@ const ActivePage: React.FC<ActivePageProps> = ({
               }}
               className="block w-full mb-2 p-2 bg-gray-700 text-white rounded"
             />
+
+            {/* Textarea with character limit */}
             <textarea
               placeholder="Your plan: How are you going to achieve this goal?"
               value={newGoal.description}
-              onChange={(e) => {
-                setNewGoal({ ...newGoal, description: e.target.value });
-                clearMessage(); // Clear error message when typing
-              }}
+              onChange={handleDescriptionChange}
               className="block w-full mb-2 p-2 bg-gray-700 text-white rounded"
             />
+            {/* Show the character count */}
+            <div className="text-sm text-gray-400">
+              {charCount}/{maxChars} characters
+            </div>
 
             {/* Task Input Fields */}
             <div className="mb-4">
@@ -152,10 +179,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
             <div className="flex justify-between mt-4">
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  clearMessage(); // Clear message on modal close
-                }}
+                onClick={handleModalClose}
               >
                 Cancel
               </button>
