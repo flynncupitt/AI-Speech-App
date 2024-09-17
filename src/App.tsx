@@ -6,7 +6,7 @@ function App() {
 
   return (
     <div>
-        <ResultCard />
+        <NewResults />
     </div>
   );
 }
