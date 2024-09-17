@@ -36,24 +36,6 @@ export default function HomePage() {
                 Login
               </a>
               <a
-                href="/record"
-                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
-              >
-                Record
-              </a>
-              <a
-                href="/recordings"
-                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
-              >
-                Recordings
-              </a>
-              <a
-                href="/tutorial"
-                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
-              >
-                Tutorial
-              </a>
-              <a
                 href="/dashboard"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
