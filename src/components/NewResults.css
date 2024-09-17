@@ -1,0 +1,101 @@
+
+.NewResult{
+    margin-top: 120px;
+    text-align: center;
+}
+
+.Stats{
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 4rem;
+    display: grid;
+    grid-template-columns: 7rem 7rem;
+    grid-template-rows: 10rem 10rem;
+    text-align: center;
+}
+
+.Mumbled
+{
+    color: #F23030;
+}
+
+.Filler
+{
+    color: #F2AE30;
+}
+
+.WPM
+{
+    color: #50F230;
+}
+
+h1{
+    font-size: 25px;
+}
+
+h2{
+    font-size: 35px;
+    margin-bottom: 0;
+}
+
+h3{
+    font-size: 18px;
+    margin-top: 0;
+}
+
+
+.play-pause-btn {
+    margin: auto;
+    background-color: #D5D5D5; /* White background */
+    color: #1D1D1D; /* Black icon */
+    border-width: 0;
+    border-radius: 50%; /* Makes the button circular */
+    width: 40px; /* Width of the button */
+    height: 40px; /* Height of the button */
+    display: flex; /* Align icon in center */
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    /* cursor: pointer; Pointer on hover */
+    /* transition: background-color 0.3s ease, color 0.3s ease; Smooth transition */
+}
+
+.play-pause-btn i {
+    font-size: 23px; /* Icon size */
+}
+
+/* .play-pause-btn:hover {
+    background-color: black; /* Changes background on hover
+    color: white; /* Changes icon color on hover
+} */
+
+/* Progress Bar Container */
+.progress-bar {
+    margin: auto;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 360px;
+    height: 4px;
+    background-color: #414141;
+    margin-top: 20px;
+}
+
+/* Colored Shapes in Progress Bar */
+.shape {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    border-radius: 2px;
+}
+
+/* Purple Circle (Playback Cursor) */
+.progress-circle {
+    position: absolute;
+    margin-top:auto;
+    margin-bottom: auto;
+    width: 12px;
+    height: 12px;
+    background-color: #8E30F2;
+    border-radius: 50%;
+    top: -2px;
+}
