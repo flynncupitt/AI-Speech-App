@@ -1,4 +1,4 @@
-import ResultCard from './assets/ResultCard.tsx'
+import NewResults from './assets/NewResults.jsx'
 
 //initializeApp(config.firebaseConfig);
 
