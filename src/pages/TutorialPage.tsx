@@ -46,14 +46,38 @@ export const tutorialSteps: Step[] = [
 export const TutorialPage = () => {
   const [tutStep, setTutStep] = useState(0);
   return (
-    <div className="flex flex-row bg-gray-900">
-      {tutStep != 0 && <button onClick={() => setTutStep(tutStep-1)}>Prev</button>}
+    <div className="flex flex-col items-center">
+      <div className="flex flex-row items-center">
+        <button
+        className={`bg-gray-500 h-[20vh] ${tutStep != 0 ? "opacity-100" : "opacity-20"}`}
+        onClick={() => setTutStep(tutStep - 1)}
+        disabled={!(tutStep != 0)}
+        >
+          {
+            <img
+              src="https://www.svgrepo.com/show/67833/left-arrow.svg"
+              className="w-10 h-10"
+            ></img>
+          }
+        </button>
       <TutorialStep
         image={tutorialSteps[tutStep].image}
         title={tutorialSteps[tutStep].title}
         description={tutorialSteps[tutStep].description}
       ></TutorialStep>
-      {tutStep+1 < tutorialSteps.length && <button onClick={() => setTutStep(tutStep+1)}>Next</button>}
+        <button
+          className={`bg-gray-500 h-[20vh] ${tutStep + 1 < tutorialSteps.length ? "opacity-100" : "opacity-20"}`}
+          onClick={() => setTutStep(tutStep + 1)}
+          disabled={!(tutStep + 1 < tutorialSteps.length)}
+        >
+          {
+            <img
+              src="https://www.svgrepo.com/show/27797/right-arrow.svg"
+              className="w-10 h-10"
+            ></img>
+          }
+        </button>
+    </div>
     </div>
   );
 };
