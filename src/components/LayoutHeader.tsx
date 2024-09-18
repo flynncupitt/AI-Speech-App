@@ -8,7 +8,10 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useLocation } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, firestore } from "../config/firebaseconfig";
+import { useNavigate,useLocation } from "react-router-dom";
+
 
 const user = {
   name: "First Last",
@@ -20,8 +23,9 @@ const user = {
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
-  { name: "Sign out", href: "/" },
+  // { name: "Sign out", href: "/" },
 ];
+
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -29,6 +33,7 @@ function classNames(...classes: string[]) {
 
 export default function DashboardHeader() {
     const location = useLocation();
+    const navigate = useNavigate();
     const navigation = [
         {
           name: "Dashboard",
@@ -39,6 +44,24 @@ export default function DashboardHeader() {
         { name: "Recordings", href: "/recordings", current: location.pathname === "/recordings" },
         { name: "Tutorial", href: "/tutorial", current: location.pathname === "/tutorial" },
       ];
+
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          navigate("/login");
+        } else {
+          console.log("User is signed in:", user);}})
+
+      const handleLogout = () => {
+        auth
+          .signOut()
+          .then(() => {
+            navigate("/");
+            
+          })
+          .catch((error) => {
+            console.error("Logout error:", error);
+          });
+      };
   return (
     <>
       {/*       
@@ -110,6 +133,14 @@ export default function DashboardHeader() {
                           </a>
                         </MenuItem>
                       ))}
+                      <MenuItem>
+                      <button
+                      onClick={handleLogout}
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                      </MenuItem>
                     </MenuItems>
                   </Menu>
                 </div>
