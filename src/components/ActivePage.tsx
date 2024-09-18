@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Goal from "./Goal";
+import { v4 as uuidv4 } from 'uuid';
 
 interface GoalType {
+  id: string;
   title: string;
   description: string;
   progress: number;
@@ -13,7 +15,7 @@ interface GoalType {
 interface ActivePageProps {
   activeGoals: GoalType[];
   addGoal: (goal: GoalType) => void;
-  completeGoal: (index: number) => void;
+  completeGoal: (index: string) => void;
 }
 
 const ActivePage: React.FC<ActivePageProps> = ({
@@ -60,34 +62,34 @@ const ActivePage: React.FC<ActivePageProps> = ({
   };
 
   const handleAddGoal = () => {
-    // Validate title and description
     if (newGoal.title.trim() === "" || newGoal.description.trim() === "") {
       setMessage("Error: Goal title and description cannot be empty!");
       return;
     }
-
-    // Filter out any empty tasks
+  
     const validTasks = tasks.filter((task) => task.trim() !== "");
-
+  
     const newGoalEntry = {
+      id: uuidv4(), // Generate a unique ID for the goal
       ...newGoal,
-      tasks: validTasks, // Only keep tasks that are not empty
+      tasks: validTasks,
       progress: 0,
-      total: validTasks.length, // Set the total to the number of valid tasks
+      total: validTasks.length,
       completed: false,
     };
+  
     addGoal(newGoalEntry);
     setIsModalOpen(false); // Close modal after submitting
     setNewGoal({ title: "", description: "", tasks: [""] });
     setTasks([""]); // Reset tasks
     setCharCount(0); // Reset the character count
-    setSuccessMessage("Goal added successfully!"); // Show success message
-
-    // Clear success message after a few seconds
+    setSuccessMessage("Goal added successfully!");
+  
     setTimeout(() => {
       setSuccessMessage("");
     }, 3000);
   };
+  
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -116,9 +118,9 @@ const ActivePage: React.FC<ActivePageProps> = ({
       </div>
 
       {/* Display active goals */}
-      {activeGoals.map((goal, index) => (
-        <Goal key={index} goal={goal} onComplete={() => completeGoal(index)} />
-      ))}
+      {activeGoals.map((goal) => (
+  <Goal key={goal.id} goal={goal} onComplete={() => completeGoal(goal.id)} />
+))}
 
       {/* Modal for Adding a Goal */}
       {isModalOpen && (

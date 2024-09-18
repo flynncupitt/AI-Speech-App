@@ -3,6 +3,7 @@ import ActivePage from "../components/ActivePage";
 import DonePage from "../components/DonePage";
 
 interface GoalType {
+  id: string;
   title: string;
   description: string;
   progress: number;
@@ -19,9 +20,9 @@ const GoalTrackerPage: React.FC = () => {
     setGoals([...goals, newGoal]);
   };
 
-  const completeGoal = (index: number) => {
-    const updatedGoals = goals.map((goal, i) =>
-      i === index ? { ...goal, completed: true } : goal
+  const completeGoal = (id: string) => {
+    const updatedGoals = goals.map((goal) =>
+      goal.id === id ? { ...goal, completed: true } : goal
     );
     setGoals(updatedGoals);
   };
