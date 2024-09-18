@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebaseconfig";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import logo from "../assets/app-logo.png";
 
 const userNavigation = [
   { name: "Your Profile", href: "/profile" },
@@ -91,15 +92,15 @@ export default function DashboardHeader() {
 
   return (
     <div className="min-h-full">
-      <Disclosure as="nav" className="bg-gray-800">
+      <Disclosure as="nav" className="bg-secondary">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <img
-                  alt="AI Speech App"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  className="h-8 w-8"
+                  alt="Clarity"
+                  src={logo}
+                  className="h-10 w-10"
                 />
               </div>
               <div className="hidden md:block">
@@ -111,8 +112,8 @@ export default function DashboardHeader() {
                       aria-current={item.current ? "page" : undefined}
                       className={classNames(
                         item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          ? "bg-primary text-white hover:text-white"
+                          : "text-gray-300 hover:bg-highlight hover:text-white",
                         "rounded-md px-3 py-2 text-sm font-medium"
                       )}
                     >
@@ -126,7 +127,7 @@ export default function DashboardHeader() {
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <MenuButton className="relative flex max-w-xs items-center rounded-full bg-secondary text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
                       <img
                         alt=""

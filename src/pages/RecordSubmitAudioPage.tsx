@@ -123,7 +123,7 @@ export default function RecordSubmitAudioPage() {
       <div className="flex flex-grow items-center justify-center">
         <div className="relative w-20 h-20 flex items-center justify-center">
           <button
-            className={`bg-purple-600 ${isRecording ? "h-10" : "h-16"} ${
+            className={`bg-primary ${isRecording ? "h-10" : "h-16"} ${
               isRecording ? "w-10" : "w-16"
             } ${
               isRecording ? "rounded-lg" : "rounded-full"
