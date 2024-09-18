@@ -64,15 +64,15 @@ function NavBar({ brandName, imageSrcPath, navItems }: NavBarProps) {
             ))}
           </ul>
           <div className="flex space-x-3 mt-3 md:mt-0">
-            <a href="#login" className="btn btn-outline-light me-3">
+            <a href="/login" className="btn btn-outline-light me-3">
               <a
-                href="#login"
+                href="/login"
                 className="border border-white text-white py-1 px-3 rounded hover:bg-white hover:text-gray-800 transition"
               >
                 Login
               </a>
               <a
-                href="#register"
+                href="/register"
                 className="bg-white text-gray-800 py-1 px-3 rounded hover:bg-gray-300 transition"
               >
                 Register

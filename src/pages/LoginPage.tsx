@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebaseconfig"; // Adjust the path as needed
 
@@ -8,6 +12,7 @@ const SignInPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate(); // Use this hook to navigate after sign-in
 
+  // Handle the sign-in process
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -23,10 +28,27 @@ const SignInPage: React.FC = () => {
       console.log("User signed in:", user);
 
       // Redirect to the main page after successful login
-      navigate("/");
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error.message);
       alert("Sign in failed: " + error.message);
+    }
+  };
+
+  // Handle password reset
+  const handlePasswordReset = async () => {
+    if (!email) {
+      alert("Please enter your email address to reset your password.");
+      return;
+    }
+
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset email sent! Please check your inbox.");
+    } catch (error: any) {
+      console.error("Password reset error:", error.message);
+      alert("Failed to send password reset email: " + error.message);
     }
   };
 
@@ -89,6 +111,15 @@ const SignInPage: React.FC = () => {
           <a href="/register" className="text-purple-500 hover:underline">
             Sign Up
           </a>
+        </p>
+        <p className="text-sm text-center text-gray-500 mt-4">
+          Forgot Password?{" "}
+          <button
+            onClick={handlePasswordReset}
+            className="text-purple-500 hover:underline font-medium bg-transparent border-none cursor-pointer"
+          >
+            Click Here
+          </button>
         </p>
       </div>
     </div>
