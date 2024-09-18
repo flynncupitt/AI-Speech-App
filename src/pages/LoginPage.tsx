@@ -23,7 +23,7 @@ const SignInPage: React.FC = () => {
       console.log("User signed in:", user);
 
       // Redirect to the main page after successful login
-      navigate("/");
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Sign in error:", error.message);
       alert("Sign in failed: " + error.message);

@@ -35,12 +35,12 @@ export default function HomePage() {
               >
                 Login
               </a>
-              <a
+              {/* <a
                 href="/dashboard"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
                 Dashboard
-              </a>
+              </a> */}
             </div>
           </div>
           <div className="md:w-1/2 order-1 md:order-2 text-center">
