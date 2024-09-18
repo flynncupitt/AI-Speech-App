@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebaseconfig"; // Adjust the path as needed
 
@@ -29,6 +29,18 @@ const SignInPage: React.FC = () => {
       alert("Sign in failed: " + error.message);
     }
   };
+
+  const auth = getAuth();
+sendPasswordResetEmail(auth, email)
+  .then(() => {
+    // Password reset email sent!
+    // ..
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
 
   return (
     <div className="bg-gray-900 w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
@@ -88,6 +100,12 @@ const SignInPage: React.FC = () => {
           Don't have an account?{" "}
           <a href="/register" className="text-purple-500 hover:underline">
             Sign Up
+          </a>
+        </p>
+        <p className="text-sm text-center text-gray-500 mt-4">
+          Forgot Password?{" "}
+          <a href="" className="text-purple-500 hover:underline">
+            Click Here
           </a>
         </p>
       </div>
