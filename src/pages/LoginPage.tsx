@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../config/firebaseconfig"; // Adjust the path as needed
 
@@ -8,6 +12,7 @@ const SignInPage: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate(); // Use this hook to navigate after sign-in
 
+  // Handle the sign-in process
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -30,17 +35,22 @@ const SignInPage: React.FC = () => {
     }
   };
 
-  const auth = getAuth();
-sendPasswordResetEmail(auth, email)
-  .then(() => {
-    // Password reset email sent!
-    // ..
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
+  // Handle password reset
+  const handlePasswordReset = async () => {
+    if (!email) {
+      alert("Please enter your email address to reset your password.");
+      return;
+    }
+
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset email sent! Please check your inbox.");
+    } catch (error: any) {
+      console.error("Password reset error:", error.message);
+      alert("Failed to send password reset email: " + error.message);
+    }
+  };
 
   return (
     <div className="bg-gray-900 w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
@@ -104,9 +114,12 @@ sendPasswordResetEmail(auth, email)
         </p>
         <p className="text-sm text-center text-gray-500 mt-4">
           Forgot Password?{" "}
-          <a href="" className="text-purple-500 hover:underline">
+          <button
+            onClick={handlePasswordReset}
+            className="text-purple-500 hover:underline font-medium bg-transparent border-none cursor-pointer"
+          >
             Click Here
-          </a>
+          </button>
         </p>
       </div>
     </div>
