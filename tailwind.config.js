@@ -12,6 +12,7 @@ module.exports = {
         primary: "#8C3CED",
         secondary: "#28134a",
         highlight: "#3b2461",
+        navBar: "#2c2636",
       },
     },
   },

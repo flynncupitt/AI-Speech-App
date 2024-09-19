@@ -10,7 +10,7 @@ function NavBar({ brandName, imageSrcPath }: NavBarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-800 shadow">
+    <nav className="bg-navBar shadow">
       <div className="container mx-auto flex items-center justify-between p-4">
         <a className="flex items-center" href="#">
           <img

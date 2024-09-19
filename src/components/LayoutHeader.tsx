@@ -92,7 +92,7 @@ export default function DashboardHeader() {
 
   return (
     <div className="min-h-full">
-      <Disclosure as="nav" className="bg-secondary">
+      <Disclosure as="nav" className="bg-navBar">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -127,7 +127,7 @@ export default function DashboardHeader() {
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <MenuButton className="relative flex max-w-xs items-center rounded-full bg-secondary text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <MenuButton className="relative flex max-w-xs items-center rounded-full bg-navBar text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
                       <img
                         alt=""
