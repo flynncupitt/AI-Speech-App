@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Goal from "./Goal";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface GoalType {
   id: string;
@@ -15,13 +15,15 @@ interface GoalType {
 interface ActivePageProps {
   activeGoals: GoalType[];
   addGoal: (goal: GoalType) => void;
-  completeGoal: (index: string) => void;
+  completeGoal: (id: string) => void;
+  setGoals: (goals: GoalType[]) => void;
 }
 
 const ActivePage: React.FC<ActivePageProps> = ({
   activeGoals,
   addGoal,
   completeGoal,
+  setGoals,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // To control modal for adding goal
   const [newGoal, setNewGoal] = useState({
@@ -32,8 +34,9 @@ const ActivePage: React.FC<ActivePageProps> = ({
   const [tasks, setTasks] = useState<string[]>([""]);
   const [message, setMessage] = useState(""); // State to show error message
   const [successMessage, setSuccessMessage] = useState(""); // State for success message outside the modal
-
   const [charCount, setCharCount] = useState(0); // Character count for the description
+  const [editingGoalId, setEditingGoalId] = useState<string | null>(null); // Track the goal being edited
+
   const maxChars = 200; // Maximum character limit
 
   // Clear the error message when the user starts typing or closes the modal
@@ -66,35 +69,68 @@ const ActivePage: React.FC<ActivePageProps> = ({
       setMessage("Error: Goal title and description cannot be empty!");
       return;
     }
-  
+
     const validTasks = tasks.filter((task) => task.trim() !== "");
-  
-    const newGoalEntry = {
-      id: uuidv4(), // Generate a unique ID for the goal
-      ...newGoal,
-      tasks: validTasks,
-      progress: 0,
-      total: validTasks.length,
-      completed: false,
-    };
-  
-    addGoal(newGoalEntry);
+
+    if (editingGoalId) {
+      // Editing an existing goal
+      const updatedGoals = activeGoals.map((goal) =>
+        goal.id === editingGoalId
+          ? {
+              ...goal,
+              title: newGoal.title,
+              description: newGoal.description,
+              tasks: validTasks,
+              total: validTasks.length,
+            }
+          : goal
+      );
+      setGoals(updatedGoals); // Update the state with the edited goal
+      setEditingGoalId(null); // Clear editing state
+      setSuccessMessage("Goal updated successfully!");
+    } else {
+      // Adding a new goal
+      const newGoalEntry = {
+        id: uuidv4(), // Generate a unique ID for the goal
+        ...newGoal,
+        tasks: validTasks,
+        progress: 0,
+        total: validTasks.length,
+        completed: false,
+      };
+      addGoal(newGoalEntry);
+      setSuccessMessage("Goal added successfully!");
+    }
+
     setIsModalOpen(false); // Close modal after submitting
     setNewGoal({ title: "", description: "", tasks: [""] });
     setTasks([""]); // Reset tasks
     setCharCount(0); // Reset the character count
-    setSuccessMessage("Goal added successfully!");
-  
+
     setTimeout(() => {
       setSuccessMessage("");
     }, 3000);
   };
-  
 
   const handleModalClose = () => {
     setIsModalOpen(false);
     setCharCount(0); // Reset character count when modal is closed
     clearMessage(); // Clear any error message
+  };
+
+  // Edit a goal
+  const handleEditGoal = (id: string) => {
+    const goalToEdit = activeGoals.find((goal) => goal.id === id);
+    if (goalToEdit) {
+      setIsModalOpen(true);
+      setNewGoal({
+        title: goalToEdit.title,
+        description: goalToEdit.description,
+        tasks: goalToEdit.tasks,
+      });
+      setTasks(goalToEdit.tasks);
+      setEditingGoalId(id); // Set the goal being edited
+    }
   };
 
   return (
@@ -112,6 +148,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
         onClick={() => {
           setIsModalOpen(true);
           setCharCount(0); // Reset charCount when opening the modal
+          setEditingGoalId(null); // Ensure it's cleared for a new goal
         }}
       >
         + Add a goal
@@ -119,14 +156,25 @@ const ActivePage: React.FC<ActivePageProps> = ({
 
       {/* Display active goals */}
       {activeGoals.map((goal) => (
-  <Goal key={goal.id} goal={goal} onComplete={() => completeGoal(goal.id)} />
-))}
+        <Goal
+          key={goal.id}
+          goal={goal}
+          onComplete={() => completeGoal(goal.id)}
+          onEdit={handleEditGoal}
+          onDelete={(id) =>
+            setGoals(activeGoals.filter((goal) => goal.id !== id))
+          }
+          isCompleted={false} // This is the active page, so goals are not completed
+        />
+      ))}
 
-      {/* Modal for Adding a Goal */}
+      {/* Modal for Adding/Editing a Goal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-gray-800 p-4 rounded-lg w-full max-w-lg">
-            <h3 className="text-xl font-bold mb-4">Add a New Goal</h3>
+            <h3 className="text-xl font-bold mb-4">
+              {editingGoalId ? "Edit Goal" : "Add a New Goal"}
+            </h3>
 
             {/* Error message inside the modal */}
             {message && (
@@ -189,7 +237,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
                 className="bg-blue-500 text-white px-4 py-2 rounded"
                 onClick={handleAddGoal}
               >
-                Submit
+                {editingGoalId ? "Update" : "Submit"}
               </button>
             </div>
           </div>

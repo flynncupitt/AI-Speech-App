@@ -13,27 +13,32 @@ interface GoalType {
 }
 
 const GoalTrackerPage: React.FC = () => {
+  const [activeGoals, setActiveGoals] = useState<GoalType[]>([]);
+  const [completedGoals, setCompletedGoals] = useState<GoalType[]>([]);
   const [showDonePage, setShowDonePage] = useState(false); // Toggle between active and done goals
-  const [goals, setGoals] = useState<GoalType[]>([]); // All goals are stored here
 
+  // Function to add a new goal to the active goals list
   const addNewGoal = (newGoal: GoalType) => {
-    setGoals([...goals, newGoal]);
+    setActiveGoals([...activeGoals, newGoal]);
   };
 
+  // Function to mark a goal as complete and move it to completed goals
   const completeGoal = (id: string) => {
-    const updatedGoals = goals.map((goal) =>
-      goal.id === id ? { ...goal, completed: true } : goal
-    );
-    setGoals(updatedGoals);
-  };
+    const updatedActiveGoals = activeGoals.filter((goal) => goal.id !== id); // Remove the goal from active
+    const completedGoal = activeGoals.find((goal) => goal.id === id); // Find the completed goal
 
-  const activeGoals = goals.filter((goal) => !goal.completed); // Active (In progress) goals
-  const doneGoals = goals.filter((goal) => goal.completed); // Completed goals
+    if (completedGoal) {
+      // Move the completed goal to the completed goals state
+      setCompletedGoals([
+        ...completedGoals,
+        { ...completedGoal, completed: true },
+      ]);
+      setActiveGoals(updatedActiveGoals); // Update active goals without the completed goal
+    }
+  };
 
   return (
     <div className="bg-gray-900 w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
-      {" "}
-      {/* This ensures full screen */}
       <h1 className="text-3xl font-bold text-center my-4">Goal Tracker</h1>
       {/* Toggle between Active and Completed goals */}
       <div className="flex justify-center space-x-4 mb-4">
@@ -57,12 +62,13 @@ const GoalTrackerPage: React.FC = () => {
       {/* Conditionally render ActivePage or DonePage based on the toggle */}
       <div className="w-full max-w-full p-4 flex-grow">
         {showDonePage ? (
-          <DonePage doneGoals={doneGoals} />
+          <DonePage doneGoals={completedGoals} setGoals={setCompletedGoals} />
         ) : (
           <ActivePage
             activeGoals={activeGoals}
             addGoal={addNewGoal}
             completeGoal={completeGoal}
+            setGoals={setActiveGoals}
           />
         )}
       </div>
