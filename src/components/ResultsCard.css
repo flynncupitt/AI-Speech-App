@@ -1,13 +1,11 @@
 
 .NewResult{
-    margin-top: 120px;
     text-align: center;
 }
 
 .Stats{
     width: fit-content;
     margin: auto;
-    margin-bottom: 4rem;
     display: grid;
     grid-template-columns: 7rem 7rem;
     grid-template-rows: 10rem 10rem;
@@ -31,6 +29,7 @@
 
 h1{
     font-size: 25px;
+    padding-bottom: 3rem;
 }
 
 h2{
@@ -43,6 +42,12 @@ h3{
     margin-top: 0;
 }
 
+.AudioVisualizer {
+    display: flex;
+    justify-content: center; /* Horizontally center the canvas */
+    margin: auto;          /* For further centering control */
+    padding-bottom: 3rem;
+}
 
 .play-pause-btn {
     margin: auto;
@@ -77,6 +82,7 @@ h3{
     height: 4px;
     background-color: #414141;
     margin-top: 20px;
+    overflow: hidden;
 }
 
 /* Colored Shapes in Progress Bar */
@@ -86,6 +92,7 @@ h3{
     height: 10px;
     top: 0;
     border-radius: 2px;
+    z-index: 1;
 }
 
 /* Purple Circle (Playback Cursor) */
@@ -98,4 +105,5 @@ h3{
     background-color: #8E30F2;
     border-radius: 50%;
     top: -2px;
+    z-index: 2;
 }
