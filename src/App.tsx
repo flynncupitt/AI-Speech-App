@@ -14,6 +14,7 @@ import RecordingsPage from "./pages/RecordingsPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
+import ResultsPage from "./pages/ResultsPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const AppRoutes = () => {
             <Route path="/recordings" element={<RecordingsPage />}></Route>
             <Route path="/tutorial" element={<TutorialPage />}></Route>
             <Route path="/dashboard" element={<UserDashboard />}></Route>
+            <Route path="/results" element={<ResultsPage />} />
           </Routes>
         </Layout>
       ) : (
