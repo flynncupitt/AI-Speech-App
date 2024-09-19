@@ -19,6 +19,7 @@ const GoalTrackerPage: React.FC = () => {
   const [showDonePage, setShowDonePage] = useState(false);
   const [showMotivationalMessage, setShowMotivationalMessage] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const jsConfetti = new (window as any).JSConfetti(); // JSConfetti integration
 
@@ -64,6 +65,12 @@ const GoalTrackerPage: React.FC = () => {
           <h2 className="text-2xl font-semibold">{motivationalMessage}</h2>
         </div>
       )}
+
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white p-2 rounded shadow-md z-50">
+          {successMessage}
+        </div>
+      )}
       <div className="flex justify-center space-x-4 mb-4">
         <button
           className={`px-4 py-2 ${
@@ -84,13 +91,18 @@ const GoalTrackerPage: React.FC = () => {
       </div>
       <div className="w-full max-w-full p-4 flex-grow">
         {showDonePage ? (
-          <DonePage doneGoals={completedGoals} setGoals={setCompletedGoals} />
+          <DonePage
+            doneGoals={completedGoals}
+            setGoals={setCompletedGoals}
+            setSuccessMessage={setSuccessMessage}
+          />
         ) : (
           <ActivePage
             activeGoals={activeGoals}
             addGoal={addNewGoal}
             completeGoal={completeGoal}
             setGoals={setActiveGoals}
+            setSuccessMessage={setSuccessMessage}
           />
         )}
       </div>

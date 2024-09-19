@@ -17,6 +17,7 @@ interface ActivePageProps {
   addGoal: (goal: GoalType) => void;
   completeGoal: (id: string, completedTasks: boolean[]) => void; // Update this line
   setGoals: (goals: GoalType[]) => void;
+  setSuccessMessage: (message: string | null) => void;
 }
 
 const ActivePage: React.FC<ActivePageProps> = ({
@@ -24,6 +25,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
   addGoal,
   completeGoal,
   setGoals,
+  setSuccessMessage,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGoal, setNewGoal] = useState({
@@ -33,7 +35,6 @@ const ActivePage: React.FC<ActivePageProps> = ({
   });
   const [tasks, setTasks] = useState<string[]>([""]);
   const [message, setMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
 
@@ -112,6 +113,17 @@ const ActivePage: React.FC<ActivePageProps> = ({
     setCharCount(0);
     clearMessage();
   };
+  const handleDeleteGoal = (id: string) => {
+    setGoals(activeGoals.filter((goal) => goal.id !== id));
+
+    // Show the success message
+    setSuccessMessage("Goal deleted successfully!");
+
+    // Hide the message after 3 seconds
+    setTimeout(() => {
+      setSuccessMessage(null);
+    }, 3000);
+  };
 
   // Edit a goal
   const handleEditGoal = (id: string) => {
@@ -130,11 +142,6 @@ const ActivePage: React.FC<ActivePageProps> = ({
 
   return (
     <div className="p-4 w-full flex-grow">
-      {successMessage && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white p-2 rounded shadow-md z-50">
-          {successMessage}
-        </div>
-      )}
       <div
         className="text-primary cursor-pointer mb-4 text-center"
         onClick={() => {
@@ -150,11 +157,9 @@ const ActivePage: React.FC<ActivePageProps> = ({
         <Goal
           key={goal.id}
           goal={goal}
-          onComplete={(completedTasks) => completeGoal(goal.id, completedTasks)} // Pass completedTasks
+          onComplete={(completedTasks) => completeGoal(goal.id, completedTasks)}
           onEdit={handleEditGoal}
-          onDelete={(id) =>
-            setGoals(activeGoals.filter((goal) => goal.id !== id))
-          }
+          onDelete={handleDeleteGoal}
           isCompleted={false}
         />
       ))}
