@@ -3,7 +3,7 @@ import { firestore } from "../config/firebaseconfig"; // Your Firestore instance
 import { collection, getDocs } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig"; // Firebase auth instance
 import { onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom"; // For redirecting if not authenticated
+import { useNavigate } from "react-router-dom"; // For redirecting and navigation
 
 const UserRecordings: React.FC = () => {
   const [recordings, setRecordings] = useState<any[]>([]);
@@ -43,6 +43,11 @@ const UserRecordings: React.FC = () => {
     return () => unsubscribe();
   }, [navigate]);
 
+  const handleViewResults = (audioURL: string) => {
+    // Pass audioURL via state when navigating
+    navigate("/results", { state: { audioURL } });
+  };
+
   if (loading) {
     return <div>Loading recordings...</div>; // Loading state
   }
@@ -58,23 +63,21 @@ const UserRecordings: React.FC = () => {
                 key={recording.id}
                 className="mb-4 flex justify-between items-center"
               >
-                <a
-                  href={recording.downloadURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline"
-                >
-                  {recording.filename}
-                </a>
-                <span className="text-sm text-gray-400">
-                  Uploaded on:{" "}
-                  {new Date(
-                    recording.createdAt.seconds * 1000
-                  ).toLocaleDateString()}
-                </span>
-              </li>
-            ))}
-          </ul>
+                {recording.filename}
+              </a>{" "}
+              (Uploaded on:{" "}
+              {new Date(
+                recording.createdAt.seconds * 1000
+              ).toLocaleDateString()}
+              )
+              <button
+                onClick={() => handleViewResults(recording.downloadURL)}
+                className="ml-4 bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                View Results
+              </button>
+            </li>
+          ))
         ) : (
           <p className="text-center text-gray-400">No recordings found.</p>
         )}
