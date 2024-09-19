@@ -25,26 +25,23 @@ const ActivePage: React.FC<ActivePageProps> = ({
   completeGoal,
   setGoals,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // To control modal for adding goal
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGoal, setNewGoal] = useState({
     title: "",
     description: "",
     tasks: [""],
   });
   const [tasks, setTasks] = useState<string[]>([""]);
-  const [message, setMessage] = useState(""); // State to show error message
-  const [successMessage, setSuccessMessage] = useState(""); // State for success message outside the modal
-  const [charCount, setCharCount] = useState(0); // Character count for the description
-  const [editingGoalId, setEditingGoalId] = useState<string | null>(null); // Track the goal being edited
+  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [charCount, setCharCount] = useState(0);
+  const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
 
-  const maxChars = 200; // Maximum character limit
-
-  // Clear the error message when the user starts typing or closes the modal
+  const maxChars = 200; //Description words limit
   const clearMessage = () => {
     setMessage("");
   };
 
-  // Handle description input and character limit
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -56,12 +53,12 @@ const ActivePage: React.FC<ActivePageProps> = ({
   };
 
   const handleAddTask = () => {
-    setTasks([...tasks, ""]); // Add a new empty task field
+    setTasks([...tasks, ""]);
   };
 
   const handleTaskChange = (index: number, value: string) => {
     const updatedTasks = tasks.map((task, i) => (i === index ? value : task));
-    setTasks(updatedTasks); // Update tasks as user types
+    setTasks(updatedTasks);
   };
 
   const handleAddGoal = () => {
@@ -73,7 +70,6 @@ const ActivePage: React.FC<ActivePageProps> = ({
     const validTasks = tasks.filter((task) => task.trim() !== "");
 
     if (editingGoalId) {
-      // Editing an existing goal
       const updatedGoals = activeGoals.map((goal) =>
         goal.id === editingGoalId
           ? {
@@ -85,13 +81,12 @@ const ActivePage: React.FC<ActivePageProps> = ({
             }
           : goal
       );
-      setGoals(updatedGoals); // Update the state with the edited goal
-      setEditingGoalId(null); // Clear editing state
+      setGoals(updatedGoals);
+      setEditingGoalId(null);
       setSuccessMessage("Goal updated successfully!");
     } else {
-      // Adding a new goal
       const newGoalEntry = {
-        id: uuidv4(), // Generate a unique ID for the goal
+        id: uuidv4(),
         ...newGoal,
         tasks: validTasks,
         progress: 0,
@@ -102,10 +97,10 @@ const ActivePage: React.FC<ActivePageProps> = ({
       setSuccessMessage("Goal added successfully!");
     }
 
-    setIsModalOpen(false); // Close modal after submitting
+    setIsModalOpen(false);
     setNewGoal({ title: "", description: "", tasks: [""] });
-    setTasks([""]); // Reset tasks
-    setCharCount(0); // Reset the character count
+    setTasks([""]);
+    setCharCount(0);
 
     setTimeout(() => {
       setSuccessMessage("");
@@ -114,8 +109,8 @@ const ActivePage: React.FC<ActivePageProps> = ({
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setCharCount(0); // Reset character count when modal is closed
-    clearMessage(); // Clear any error message
+    setCharCount(0);
+    clearMessage();
   };
 
   // Edit a goal
@@ -129,32 +124,28 @@ const ActivePage: React.FC<ActivePageProps> = ({
         tasks: goalToEdit.tasks,
       });
       setTasks(goalToEdit.tasks);
-      setEditingGoalId(id); // Set the goal being edited
+      setEditingGoalId(id);
     }
   };
 
   return (
     <div className="p-4 w-full flex-grow">
-      {/* Success popup outside the modal */}
       {successMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white p-2 rounded shadow-md z-50">
           {successMessage}
         </div>
       )}
-
-      {/* Add Goal Button */}
       <div
         className="text-blue-500 cursor-pointer mb-4"
         onClick={() => {
           setIsModalOpen(true);
-          setCharCount(0); // Reset charCount when opening the modal
-          setEditingGoalId(null); // Ensure it's cleared for a new goal
+          setCharCount(0);
+          setEditingGoalId(null);
         }}
       >
         + Add a goal
       </div>
 
-      {/* Display active goals */}
       {activeGoals.map((goal) => (
         <Goal
           key={goal.id}
@@ -164,11 +155,9 @@ const ActivePage: React.FC<ActivePageProps> = ({
           onDelete={(id) =>
             setGoals(activeGoals.filter((goal) => goal.id !== id))
           }
-          isCompleted={false} // This is the active page, so goals are not completed
+          isCompleted={false}
         />
       ))}
-
-      {/* Modal for Adding/Editing a Goal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-gray-800 p-4 rounded-lg w-full max-w-lg">
@@ -176,7 +165,6 @@ const ActivePage: React.FC<ActivePageProps> = ({
               {editingGoalId ? "Edit Goal" : "Add a New Goal"}
             </h3>
 
-            {/* Error message inside the modal */}
             {message && (
               <div className="bg-red-500 text-white text-center p-2 rounded mb-4">
                 {message}
@@ -189,18 +177,17 @@ const ActivePage: React.FC<ActivePageProps> = ({
               value={newGoal.title}
               onChange={(e) => {
                 setNewGoal({ ...newGoal, title: e.target.value });
-                clearMessage(); // Clear error message when typing
+                clearMessage();
               }}
               className="block w-full mb-2 p-2 bg-gray-700 text-white rounded"
             />
-
-            {/* Textarea with character limit */}
             <textarea
               placeholder="Your plan: How are you going to achieve this goal?"
               value={newGoal.description}
               onChange={handleDescriptionChange}
               className="block w-full mb-2 p-2 bg-gray-700 text-white rounded"
             />
+
             {/* Show the character count */}
             <div className="text-sm text-gray-400">
               {charCount}/{maxChars} characters

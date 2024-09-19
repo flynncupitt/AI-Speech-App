@@ -26,7 +26,7 @@ const Goal: React.FC<GoalProps> = ({
   const [completedTasks, setCompletedTasks] = useState<boolean[]>(
     new Array(goal.tasks.length).fill(false)
   );
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle the 3-dot menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false); //toggle the 3-dot menu
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleTaskCompletion = (index: number) => {
@@ -38,18 +38,17 @@ const Goal: React.FC<GoalProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false); // Close the menu
+        setIsMenuOpen(false); //Close the menu
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside); // Clean up the event listener
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
 
-  // Calculate the progress based on completed tasks
   const completedCount = completedTasks.filter(Boolean).length;
   const progressPercentage = Math.round((completedCount / goal.total) * 100);
 
@@ -71,7 +70,7 @@ const Goal: React.FC<GoalProps> = ({
             {isMenuOpen && (
               <div className="absolute right-0 mt-2 w-32 bg-gray-700 rounded-md shadow-lg">
                 <ul>
-                  {/* Conditionally render the Edit button only if the goal is not completed */}
+                  {/* Only render the Edit button only if the goal is not completed */}
                   {!isCompleted && (
                     <li
                       className="px-4 py-2 text-gray-300 hover:bg-gray-600 cursor-pointer"

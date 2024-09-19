@@ -24,12 +24,12 @@ const DonePage: React.FC<DonePageProps> = ({ doneGoals, setGoals }) => {
           <Goal
             key={goal.id}
             goal={goal}
-            onComplete={() => {}} // Placeholder, no need for onComplete in DonePage
-            onEdit={() => {}} // No edit functionality for completed goals
+            onComplete={() => {}}
+            onEdit={() => {}}
             onDelete={(id) =>
               setGoals(doneGoals.filter((goal) => goal.id !== id))
             }
-            isCompleted={true} // Completed goals, so no Edit button
+            isCompleted={true}
           />
         ))
       ) : (
