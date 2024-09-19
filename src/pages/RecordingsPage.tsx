@@ -48,32 +48,40 @@ const UserRecordings: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl mb-4">My Recordings</h2>
-      <ul>
+    <div className="flex justify-center min-h-screen">
+      <div className="p-6 bg-gray-700 rounded-lg shadow-md w-full max-w-4xl mt-10">
+        <h2 className="text-3xl font-semibold text-center text-white mb-6">My Recordings</h2>
         {recordings.length > 0 ? (
-          recordings.map((recording) => (
-            <li key={recording.id} className="mb-2">
-              <a
-                href={recording.downloadURL}
-                target="_blank"
-                rel="noopener noreferrer"
+          <ul>
+            {recordings.map((recording) => (
+              <li
+                key={recording.id}
+                className="mb-4 flex justify-between items-center"
               >
-                {recording.filename}
-              </a>{" "}
-              (Uploaded on:{" "}
-              {new Date(
-                recording.createdAt.seconds * 1000
-              ).toLocaleDateString()}
-              )
-            </li>
-          ))
+                <a
+                  href={recording.downloadURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  {recording.filename}
+                </a>
+                <span className="text-sm text-gray-400">
+                  Uploaded on:{" "}
+                  {new Date(
+                    recording.createdAt.seconds * 1000
+                  ).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
+          </ul>
         ) : (
-          <p>No recordings found.</p>
+          <p className="text-center text-gray-400">No recordings found.</p>
         )}
-      </ul>
+      </div>
     </div>
   );
+  
 };
 
 export default UserRecordings;
