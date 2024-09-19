@@ -53,15 +53,16 @@ const UserRecordings: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center min-h-screen">
-      <div className="p-6 bg-gray-700 rounded-lg shadow-md w-full max-w-4xl mt-10">
-        <h2 className="text-3xl font-semibold text-center text-white mb-6">My Recordings</h2>
+    <div className="p-4">
+      <h2 className="text-2xl mb-4">My Recordings</h2>
+      <ul>
         {recordings.length > 0 ? (
-          <ul>
-            {recordings.map((recording) => (
-              <li
-                key={recording.id}
-                className="mb-4 flex justify-between items-center"
+          recordings.map((recording) => (
+            <li key={recording.id} className="mb-2">
+              <a
+                href={recording.downloadURL}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {recording.filename}
               </a>{" "}
@@ -79,12 +80,11 @@ const UserRecordings: React.FC = () => {
             </li>
           ))
         ) : (
-          <p className="text-center text-gray-400">No recordings found.</p>
+          <p>No recordings found.</p>
         )}
-      </div>
+      </ul>
     </div>
   );
-  
 };
 
 export default UserRecordings;
