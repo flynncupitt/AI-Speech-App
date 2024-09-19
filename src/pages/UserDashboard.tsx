@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardHeader from "../components/LayoutHeader";
+import TextAnalysis from "../components/TextAnalysis";
 // import SpeechTextTest from "../components/SpeechTextTest";
 
 export const UserDashboard = () => {

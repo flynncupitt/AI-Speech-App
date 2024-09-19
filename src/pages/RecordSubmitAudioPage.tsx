@@ -5,7 +5,6 @@ import { firestore } from "../config/firebaseconfig"; // Import Firestore instan
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig"; // Import Firebase auth instance
 
-
 export default function RecordSubmitAudioPage() {
   const [recordedUrl, setRecordedUrl] = useState("");
   const mediaStream = useRef<MediaStream | null>(null);
@@ -26,7 +25,7 @@ export default function RecordSubmitAudioPage() {
     "Placeholder prompt 7",
     "Placeholder prompt 8",
     "Placeholder prompt 9",
-    "Placeholder prompt 10"
+    "Placeholder prompt 10",
   ];
 
   // Function to generate random file names
@@ -96,6 +95,8 @@ export default function RecordSubmitAudioPage() {
       mediaRecorder.current.start();
     } catch (error) {
       console.error("Error accessing microphone:", error);
+      alert("Error accessing microphone. Could not begin recording.");
+      setIsRecording(false);
     }
   };
 
@@ -113,7 +114,9 @@ export default function RecordSubmitAudioPage() {
   return (
     <div className="flex flex-col h-[90vh] items-center justify-center">
       <p className="text-xl">Random prompt</p>
-      <p className="flex-grow">{topicPrompts[Math.floor(Math.random() * topicPrompts.length)]}</p>
+      <p className="flex-grow">
+        {topicPrompts[Math.floor(Math.random() * topicPrompts.length)]}
+      </p>
       <div className="flex-grow">
         <audio controls src={recordedUrl} />
       </div>
