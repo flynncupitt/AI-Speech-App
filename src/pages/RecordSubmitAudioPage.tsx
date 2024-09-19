@@ -5,6 +5,7 @@ import { firestore } from "../config/firebaseconfig"; // Import Firestore instan
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig"; // Import Firebase auth instance
 
+
 export default function RecordSubmitAudioPage() {
   const [recordedUrl, setRecordedUrl] = useState("");
   const mediaStream = useRef<MediaStream | null>(null);
@@ -15,6 +16,18 @@ export default function RecordSubmitAudioPage() {
   const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const topicPrompts = [
+    "Placeholder prompt 1",
+    "Placeholder prompt 2",
+    "Placeholder prompt 3",
+    "Placeholder prompt 4",
+    "Placeholder prompt 5",
+    "Placeholder prompt 6",
+    "Placeholder prompt 7",
+    "Placeholder prompt 8",
+    "Placeholder prompt 9",
+    "Placeholder prompt 10"
+  ];
 
   // Function to generate random file names
   const generateRandomFileName = (extension: string) => {
@@ -98,8 +111,9 @@ export default function RecordSubmitAudioPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <p className="flex-grow text-xl">My chosen prompt</p>
+    <div className="flex flex-col h-[90vh] items-center justify-center">
+      <p className="text-xl">Random prompt</p>
+      <p className="flex-grow">{topicPrompts[Math.floor(Math.random() * topicPrompts.length)]}</p>
       <div className="flex-grow">
         <audio controls src={recordedUrl} />
       </div>
@@ -109,7 +123,7 @@ export default function RecordSubmitAudioPage() {
       <div className="flex flex-grow items-center justify-center">
         <div className="relative w-20 h-20 flex items-center justify-center">
           <button
-            className={`bg-purple-600 ${isRecording ? "h-10" : "h-16"} ${
+            className={`bg-primary ${isRecording ? "h-10" : "h-16"} ${
               isRecording ? "w-10" : "w-16"
             } ${
               isRecording ? "rounded-lg" : "rounded-full"

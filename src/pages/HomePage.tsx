@@ -1,53 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import imagePath from "../assets/app-logo.png";
 import NavBar from "../components/NavBar.tsx";
 
 export default function HomePage() {
+  const titles = ["Master your", "Sound more", "Own every"];
+  const highlightedWords = ["message.", "sophisticated.", "conversation."];
+  const [title1, setTitle1] = useState(titles[0]);
+  const [title2, setTitle2] = useState(highlightedWords[0]);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false);
+
+      setTimeout(() => {
+        setTitle1((prev) => titles[(titles.indexOf(prev) + 1) % titles.length]);
+        setTitle2((prev) => highlightedWords[(highlightedWords.indexOf(prev) + 1) % highlightedWords.length]);
+        setFade(true);
+      }, 400);
+    }, 4000);
+
+    return () => clearInterval(interval); // Clean up on unmount
+  }, []);
+
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
+    <div className="bg-[#18151c] min-h-screen text-white">
       <NavBar
-        brandName="AI Speech Clarity"
+        brandName="Clarity"
         imageSrcPath={imagePath}
-        navItems={["Home"]}
-        showAuthButtons={true}
       />
       <section className="hero-section py-32 px-6 flex items-center justify-center">
         <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
           <div className="md:w-1/2 order-2 md:order-1 text-center md:text-left space-y-6">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">
-              Improve Your Speech with Our{" "}
-              <span className="text-indigo-400">Speech Clarity App</span>
+              <span className={`transition-opacity duration-500 ${fade ? "opacity-100" : "opacity-0"}`}>
+                {title1} <span className="text-primary">{title2}</span>
+              </span>
             </h1>
             <p className="text-lg md:text-xl">
-              Empower your communication with our advanced AI-driven speech
-              clarity solutions. Achieve clearer and more effective speech in
-              any environment.
+              Cut the fillers and speak with confidence. Get real-time insights
+              and personalized guidance to refine your delivery and sound more
+              polished in any conversation.
             </p>
             <div className="flex justify-center md:justify-start space-x-6">
               <a
                 href="/register"
-                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+                className="bg-primary hover:bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Register Page
+                Register
               </a>
               <a
                 href="/login"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Login Page
+                Login
               </a>
-              <a
-                href="/record"
+              {/* <a
+                href="/dashboard"
                 className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
               >
-                Record Page
-              </a>
-              <a
-                href="/recordings"
-                className="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-semibold"
-              >
-                Recordings Page
-              </a>
+                Dashboard
+              </a> */}
             </div>
           </div>
           <div className="md:w-1/2 order-1 md:order-2 text-center">

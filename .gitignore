@@ -27,3 +27,5 @@ dist-ssr
 .env
 .DS_Store
 Mockup Images/.DS_Store
+package.json
+package-lock.json
