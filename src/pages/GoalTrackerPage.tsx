@@ -17,6 +17,12 @@ const GoalTrackerPage: React.FC = () => {
   const [completedGoals, setCompletedGoals] = useState<GoalType[]>([]);
   const [showDonePage, setShowDonePage] = useState(false);
 
+  const jsConfetti = new (window as any).JSConfetti(); // JSConfetti integration
+
+  const handleConfetti = () => {
+    jsConfetti.addConfetti();
+  };
+
   const addNewGoal = (newGoal: GoalType) => {
     setActiveGoals([...activeGoals, newGoal]);
   };
@@ -31,6 +37,7 @@ const GoalTrackerPage: React.FC = () => {
         { ...completedGoal, completed: true },
       ]);
       setActiveGoals(updatedActiveGoals);
+      handleConfetti();
     }
   };
 
