@@ -136,7 +136,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
         </div>
       )}
       <div
-        className="text-blue-500 cursor-pointer mb-4"
+        className="text-primary cursor-pointer mb-4 text-center"
         onClick={() => {
           setIsModalOpen(true);
           setCharCount(0);

@@ -35,12 +35,12 @@ const GoalTrackerPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
+    <div className="bg-[#18151c] w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
       <h1 className="text-3xl font-bold text-center my-4">Goal Tracker</h1>
       <div className="flex justify-center space-x-4 mb-4">
         <button
           className={`px-4 py-2 ${
-            !showDonePage ? "bg-blue-500" : "bg-gray-700"
+            !showDonePage ? "bg-primary" : "bg-gray-700"
           } rounded`}
           onClick={() => setShowDonePage(false)}
         >
@@ -48,7 +48,7 @@ const GoalTrackerPage: React.FC = () => {
         </button>
         <button
           className={`px-4 py-2 ${
-            showDonePage ? "bg-blue-500" : "bg-gray-700"
+            showDonePage ? "bg-primary" : "bg-gray-700"
           } rounded`}
           onClick={() => setShowDonePage(true)}
         >

@@ -54,7 +54,7 @@ const Goal: React.FC<GoalProps> = ({
 
   return (
     <div className="flex justify-center items-start relative">
-      <div className="bg-gray-800 p-4 rounded-lg mb-4 w-full max-w-[600px]">
+      <div className="bg-navBar p-4 rounded-lg mb-4 w-full max-w-[600px]">
         {/* Title and 3-dot menu */}
         <div className="flex justify-between items-start">
           <h2 className="text-xl font-bold mb-2 break-words truncate max-w-full">

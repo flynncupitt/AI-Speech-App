@@ -55,6 +55,11 @@ export default function DashboardHeader() {
       current: location.pathname === "/recordings",
     },
     {
+      name: "Goals",
+      href: "/goal-tracker",
+      current: location.pathname === "/recordings",
+    },
+    {
       name: "Tutorial",
       href: "/tutorial",
       current: location.pathname === "/tutorial",
