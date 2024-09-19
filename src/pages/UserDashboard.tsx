@@ -42,7 +42,7 @@ export const UserDashboard = () => {
   return (
     <div className="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-lg max-w-md mx-auto">
       <h1 className="text-3xl font-bold mb-4 text-indigo-600">Dashboard</h1>
-      <div className="bg-white p-4 rounded-lg shadow-md w-full text-center">
+      <div className="bg-white p-4 rounded-lg shadow-md w-full text-center mb-4">
         <p className="text-xl font-semibold text-gray-700">
           Recordings Score <span className="text-yellow-500">⭐️</span>:
         </p>
@@ -50,6 +50,13 @@ export const UserDashboard = () => {
           {recordingsCount}
         </p>
       </div>
+
+      <a
+        href="/recordings"
+        className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-500 transition duration-300"
+      >
+        View My Recordings
+      </a>
     </div>
   );
 };
