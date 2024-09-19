@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Goal from "./Goal";
 import { v4 as uuidv4 } from "uuid";
+import { updateDoc, doc } from "firebase/firestore";
+import { firestore, auth } from "../config/firebaseconfig";
+import { deleteDoc } from "firebase/firestore";
 
 interface GoalType {
   id: string;
@@ -15,7 +18,7 @@ interface GoalType {
 interface ActivePageProps {
   activeGoals: GoalType[];
   addGoal: (goal: GoalType) => void;
-  completeGoal: (id: string, completedTasks: boolean[]) => void; // Update this line
+  completeGoal: (id: string, completedTasks: boolean[]) => void;
   setGoals: (goals: GoalType[]) => void;
   setSuccessMessage: (message: string | null) => void;
 }
@@ -62,38 +65,56 @@ const ActivePage: React.FC<ActivePageProps> = ({
     setTasks(updatedTasks);
   };
 
-  const handleAddGoal = () => {
+  const handleAddGoal = async () => {
     if (newGoal.title.trim() === "" || newGoal.description.trim() === "") {
       setMessage("Error: Goal title and description cannot be empty!");
       return;
     }
 
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      console.error("User not authenticated.");
+      return;
+    }
+
     const validTasks = tasks.filter((task) => task.trim() !== "");
 
+    // If we're editing an existing goal
     if (editingGoalId) {
+      // Create the updated goal object
+      const updatedGoal = {
+        title: newGoal.title,
+        description: newGoal.description,
+        tasks: validTasks,
+        total: validTasks.length,
+        progress: 0,
+        completed: false, // Depending on the state of completion
+      };
+
+      // Update the goal in Firestore
+      const goalRef = doc(firestore, `users/${userId}/goals`, editingGoalId);
+      await updateDoc(goalRef, updatedGoal);
+
+      // Update the goal in the local state
       const updatedGoals = activeGoals.map((goal) =>
-        goal.id === editingGoalId
-          ? {
-              ...goal,
-              title: newGoal.title,
-              description: newGoal.description,
-              tasks: validTasks,
-              total: validTasks.length,
-            }
-          : goal
+        goal.id === editingGoalId ? { id: editingGoalId, ...updatedGoal } : goal
       );
       setGoals(updatedGoals);
+
       setEditingGoalId(null);
       setSuccessMessage("Goal updated successfully!");
     } else {
+      // If we're adding a new goal
       const newGoalEntry = {
-        id: uuidv4(),
         ...newGoal,
+        id: uuidv4(),
         tasks: validTasks,
         progress: 0,
         total: validTasks.length,
         completed: false,
       };
+
       addGoal(newGoalEntry);
       setSuccessMessage("Goal added successfully!");
     }
@@ -113,16 +134,30 @@ const ActivePage: React.FC<ActivePageProps> = ({
     setCharCount(0);
     clearMessage();
   };
-  const handleDeleteGoal = (id: string) => {
-    setGoals(activeGoals.filter((goal) => goal.id !== id));
 
-    // Show the success message
-    setSuccessMessage("Goal deleted successfully!");
+  const handleDeleteGoal = async (id: string) => {
+    const userId = auth.currentUser?.uid;
 
-    // Hide the message after 3 seconds
-    setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
+    if (!userId) {
+      console.error("User not authenticated.");
+      return;
+    }
+
+    try {
+      // Delete from Firestore
+      const goalRef = doc(firestore, `users/${userId}/goals`, id);
+      await deleteDoc(goalRef);
+
+      // Update local state
+      setGoals(activeGoals.filter((goal) => goal.id !== id));
+
+      setSuccessMessage("Goal deleted successfully!");
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
+    } catch (e) {
+      console.error("Error deleting goal: ", e);
+    }
   };
 
   // Edit a goal
