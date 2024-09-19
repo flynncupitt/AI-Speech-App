@@ -16,6 +16,7 @@ import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
 import ProfilePage from "./pages/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const AppRoutes = () => {
             <Route path="/dashboard" element={<UserDashboard />}></Route>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/goal-tracker" element={<GoalTrackerPage />} />
+            <Route path="*" element={<NotFoundPage />} /> {/* 404 fallback */}
           </Routes>
         </Layout>
       ) : (
@@ -43,6 +45,7 @@ const AppRoutes = () => {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/register" element={<RegisterPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       )}
     </>
