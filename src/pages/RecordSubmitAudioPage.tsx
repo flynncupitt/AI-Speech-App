@@ -19,22 +19,21 @@ export default function RecordSubmitAudioPage() {
 
   // Separate lists for short, medium, and long prompts
   const shortPrompts = [
-    "The sun set behind the mountains, casting a golden glow over the valley.",
-    "A gentle breeze carried the scent of blooming flowers through the air.",
-    "The forest floor was soft underfoot, covered in a thick carpet of moss."
+    "The power of a smile in daily interactions",
+    "Why morning routines set the tone for the day",
+    "The impact of gratitude on mental health"
   ];
 
   const mediumPrompts = [
-    "The ancient tree stood tall in the clearing, its roots deep and its branches wide. Birds nested high above, chirping a melody that filled the serene forest.",
-    "The ocean waves crashed rhythmically against the shore, their sound soothing to the onlookers. A distant lighthouse blinked, guiding ships through the evening fog.",
-    "The morning fog hung low over the hills, creating a mystical atmosphere. As the sun slowly rose, its light pierced through, illuminating the landscape in a soft glow."
+    "The role of social media in shaping modern communication",
+    "How small habits lead to big changes",
+    "The importance of environmental conservation in urban areas"
   ];
 
   const longPrompts = [
-    "As the storm raged outside, the small cabin offered a haven of warmth and comfort. Inside, a fire crackled in the hearth, casting dancing shadows on the walls. The family gathered around the table, sharing stories of the day, the storm's howling winds a mere backdrop to their laughter.",
-    "The bustling city streets were alive with energy as people hurried to their destinations. Street vendors called out, offering their goods, while musicians played for the crowds. Amidst the chaos, a single figure stood still, observing the flow of life with quiet contemplation, as the city pulsed with its unrelenting rhythm.",
-    "In the heart of the ancient castle, a grand banquet was taking place. The long table was filled with delicacies from distant lands, and the air was filled with the scent of roasted meats and freshly baked bread. Musicians played lively tunes, while nobles and common folk alike mingled and danced, forgetting for a moment the troubles that awaited them beyond the castle walls.",
-    "The expedition had been traveling for weeks, trekking through dense jungles and across treacherous mountains. At last, they reached their destination: a forgotten temple hidden deep within the wilderness. Vines and moss covered the ancient stone structure, but its grandeur was unmistakable. As they stepped inside, torches flickering in the dark, they knew they were on the brink of uncovering secrets lost to time."
+    "The future of renewable energy and its global implications",
+    "The evolution of education in a digital world",
+    "The psychological effects of working from home in a post-pandemic era"
   ];
 
   // Function to generate random file names
@@ -160,7 +159,6 @@ export default function RecordSubmitAudioPage() {
         </button>
       </div>
 
-      {/* Display selected prompt in a container */}
       <div className="bg-white shadow-md rounded-lg p-4 max-w-lg text-center">
         {selectedPrompt ? (
           <p className="text-lg font-semibold text-gray-700">{selectedPrompt}</p>
@@ -169,7 +167,7 @@ export default function RecordSubmitAudioPage() {
         )}
       </div>
 
-      <div className="flex-grow">
+      <div className="flex-grow pt-4">
         <audio controls src={recordedUrl} />
       </div>
       {isRecording && (
