@@ -10,12 +10,15 @@ interface GoalType {
   total: number;
   tasks: string[];
   completed: boolean;
+  completedTasks?: boolean[];
 }
 
 const GoalTrackerPage: React.FC = () => {
   const [activeGoals, setActiveGoals] = useState<GoalType[]>([]);
   const [completedGoals, setCompletedGoals] = useState<GoalType[]>([]);
   const [showDonePage, setShowDonePage] = useState(false);
+  const [showMotivationalMessage, setShowMotivationalMessage] = useState(false);
+  const [motivationalMessage, setMotivationalMessage] = useState("");
 
   const jsConfetti = new (window as any).JSConfetti(); // JSConfetti integration
 
@@ -27,23 +30,40 @@ const GoalTrackerPage: React.FC = () => {
     setActiveGoals([...activeGoals, newGoal]);
   };
 
-  const completeGoal = (id: string) => {
+  const completeGoal = (id: string, completedTasks: boolean[]) => {
     const updatedActiveGoals = activeGoals.filter((goal) => goal.id !== id);
     const completedGoal = activeGoals.find((goal) => goal.id === id);
 
     if (completedGoal) {
       setCompletedGoals([
         ...completedGoals,
-        { ...completedGoal, completed: true },
+        { ...completedGoal, completed: true, completedTasks }, // Pass completedTasks here
       ]);
       setActiveGoals(updatedActiveGoals);
+
+      //Trigger the confetti
       handleConfetti();
+
+      // shows the motivational message
+      setMotivationalMessage("🎉 Congratulations on completing your goal! 🎉");
+      setShowMotivationalMessage(true);
+
+      setTimeout(() => {
+        setShowMotivationalMessage(false);
+      }, 3000);
     }
   };
 
   return (
     <div className="bg-[#18151c] w-screen text-white flex flex-col items-center justify-center min-h-screen p-6">
       <h1 className="text-3xl font-bold text-center my-4">Goal Tracker</h1>
+
+      {/*Display the motivational message */}
+      {showMotivationalMessage && (
+        <div className="fixed top-20 bg-green-500 text-white p-4 rounded-md shadow-md pop-up">
+          <h2 className="text-2xl font-semibold">{motivationalMessage}</h2>
+        </div>
+      )}
       <div className="flex justify-center space-x-4 mb-4">
         <button
           className={`px-4 py-2 ${

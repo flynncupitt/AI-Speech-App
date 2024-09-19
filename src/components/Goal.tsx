@@ -9,8 +9,9 @@ interface GoalProps {
     total: number;
     tasks: string[];
     completed: boolean;
+    completedTasks?: boolean[];
   };
-  onComplete: () => void;
+  onComplete: (completedTasks: boolean[]) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   isCompleted: boolean;
@@ -24,9 +25,10 @@ const Goal: React.FC<GoalProps> = ({
   isCompleted,
 }) => {
   const [completedTasks, setCompletedTasks] = useState<boolean[]>(
-    new Array(goal.tasks.length).fill(false)
+    goal.completedTasks || new Array(goal.tasks.length).fill(false)
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false); //toggle the 3-dot menu
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleTaskCompletion = (index: number) => {
@@ -52,6 +54,22 @@ const Goal: React.FC<GoalProps> = ({
   const completedCount = completedTasks.filter(Boolean).length;
   const progressPercentage = Math.round((completedCount / goal.total) * 100);
 
+  // Check if all tasks are completed
+  const areAllTasksCompleted = completedTasks.every((task) => task);
+
+  const handleCompleteClick = () => {
+    if (goal.tasks.length > 0 && !areAllTasksCompleted) {
+      // If there are tasks and not all tasks are completed, show an error
+      setErrorMessage(
+        "Please complete all tasks before marking the goal as completed."
+      );
+      return;
+    }
+
+    setErrorMessage(null);
+    onComplete(completedTasks);
+  };
+
   return (
     <div className="flex justify-center items-start relative">
       <div className="bg-navBar p-4 rounded-lg mb-4 w-full max-w-[600px]">
@@ -70,7 +88,6 @@ const Goal: React.FC<GoalProps> = ({
             {isMenuOpen && (
               <div className="absolute right-0 mt-2 w-32 bg-gray-700 rounded-md shadow-lg">
                 <ul>
-                  {/* Only render the Edit button only if the goal is not completed */}
                   {!isCompleted && (
                     <li
                       className="px-4 py-2 text-gray-300 hover:bg-gray-600 cursor-pointer"
@@ -117,12 +134,16 @@ const Goal: React.FC<GoalProps> = ({
           </div>
         )}
 
+        {errorMessage && (
+          <div className="text-red-500 mb-2">{errorMessage}</div>
+        )}
+
         <div className="flex justify-between items-center">
           <button
             className={`px-3 py-1 ${
               goal.completed ? "bg-green-500" : "bg-yellow-500"
             } text-white rounded`}
-            onClick={onComplete}
+            onClick={handleCompleteClick} // Update the completion button
           >
             {goal.completed ? "Completed" : "In progress"}
           </button>

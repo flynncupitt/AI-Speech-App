@@ -15,7 +15,7 @@ interface GoalType {
 interface ActivePageProps {
   activeGoals: GoalType[];
   addGoal: (goal: GoalType) => void;
-  completeGoal: (id: string) => void;
+  completeGoal: (id: string, completedTasks: boolean[]) => void; // Update this line
   setGoals: (goals: GoalType[]) => void;
 }
 
@@ -150,7 +150,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
         <Goal
           key={goal.id}
           goal={goal}
-          onComplete={() => completeGoal(goal.id)}
+          onComplete={(completedTasks) => completeGoal(goal.id, completedTasks)} // Pass completedTasks
           onEdit={handleEditGoal}
           onDelete={(id) =>
             setGoals(activeGoals.filter((goal) => goal.id !== id))
