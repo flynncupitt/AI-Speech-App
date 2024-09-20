@@ -16,6 +16,7 @@ import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
 import ProfilePage from "./pages/ProfilePage";
+import ResultsPage from "./pages/ResultsPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const AppRoutes = () => {
             <Route path="/dashboard" element={<UserDashboard />}></Route>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/goal-tracker" element={<GoalTrackerPage />} />
+            <Route path="/results" element={<ResultsPage />} />
           </Routes>
         </Layout>
       ) : (

@@ -29,6 +29,10 @@ This web application is designed to help users improve their speech skills throu
   - Github: [DanVann123](https://github.com/DanVann123)
 - **Azmaan Din**
   - GitHub: [Aquitaine24](https://github.com/aquitaine24)
+- **Flynn Cupitt**
+  - GitHub: [flynncupitt](https://github.com/flynncupitt)
+- **Gio Turtal**
+  - GitHub: [svf0110](https://github.com/svf0110)
 
 ## License
 
