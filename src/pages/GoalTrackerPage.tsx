@@ -1,6 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ActivePage from "../components/ActivePage";
 import DonePage from "../components/DonePage";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
+import { firestore, auth } from "../config/firebaseconfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { serverTimestamp } from "firebase/firestore";
 
 interface GoalType {
   id: string;
@@ -20,6 +32,7 @@ const GoalTrackerPage: React.FC = () => {
   const [showMotivationalMessage, setShowMotivationalMessage] = useState(false);
   const [motivationalMessage, setMotivationalMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const jsConfetti = new (window as any).JSConfetti(); // JSConfetti integration
 
@@ -27,31 +40,110 @@ const GoalTrackerPage: React.FC = () => {
     jsConfetti.addConfetti();
   };
 
-  const addNewGoal = (newGoal: GoalType) => {
-    setActiveGoals([...activeGoals, newGoal]);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, fetch goals
+        fetchGoals(user.uid);
+      } else {
+        console.error("User not authenticated.");
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const fetchGoals = async (userId: string) => {
+    try {
+      const q = query(
+        collection(firestore, `users/${userId}/goals`),
+        orderBy("createdAt", "asc")
+      );
+      const querySnapshot = await getDocs(q);
+
+      const fetchedGoals: GoalType[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedGoals.push({ id: doc.id, ...doc.data() } as GoalType);
+      });
+
+      setActiveGoals(fetchedGoals.filter((goal) => !goal.completed));
+      setCompletedGoals(fetchedGoals.filter((goal) => goal.completed));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching goals: ", error);
+      setLoading(false);
+    }
   };
 
-  const completeGoal = (id: string, completedTasks: boolean[]) => {
-    const updatedActiveGoals = activeGoals.filter((goal) => goal.id !== id);
+  if (loading) {
+    return <p>Loading...</p>; // Display loading state while waiting for data
+  }
+
+  const addNewGoal = async (newGoal: GoalType) => {
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      console.error("User not authenticated.");
+      return;
+    }
+
+    try {
+      const { id, ...goalWithoutId } = newGoal;
+
+      const docRef = await addDoc(
+        collection(firestore, `users/${userId}/goals`),
+        {
+          ...goalWithoutId,
+          completed: false,
+          completedTasks: new Array(newGoal.tasks.length).fill(false),
+          createdAt: serverTimestamp(), // Add a timestamp
+        }
+      );
+
+      setActiveGoals([...activeGoals, { id: docRef.id, ...goalWithoutId }]);
+    } catch (e) {
+      console.error("Error adding goal: ", e);
+    }
+  };
+
+  const completeGoal = async (id: string, completedTasks: boolean[]) => {
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      console.error("User not authenticated.");
+      return;
+    }
+
     const completedGoal = activeGoals.find((goal) => goal.id === id);
 
     if (completedGoal) {
-      setCompletedGoals([
-        ...completedGoals,
-        { ...completedGoal, completed: true, completedTasks }, // Pass completedTasks here
-      ]);
-      setActiveGoals(updatedActiveGoals);
+      try {
+        // Update Firestore
+        const docRef = doc(firestore, `users/${userId}/goals`, id);
+        await updateDoc(docRef, {
+          completed: true,
+          completedTasks,
+        });
 
-      //Trigger the confetti
-      handleConfetti();
+        setCompletedGoals([
+          ...completedGoals,
+          { ...completedGoal, completed: true, completedTasks },
+        ]);
+        setActiveGoals(activeGoals.filter((goal) => goal.id !== id));
 
-      // shows the motivational message
-      setMotivationalMessage("🎉 Congratulations on completing your goal! 🎉");
-      setShowMotivationalMessage(true);
-
-      setTimeout(() => {
-        setShowMotivationalMessage(false);
-      }, 3000);
+        // Show confetti and motivational message
+        handleConfetti();
+        setMotivationalMessage(
+          "🎉 Congratulations on completing your goal! 🎉"
+        );
+        setShowMotivationalMessage(true);
+        setTimeout(() => {
+          setShowMotivationalMessage(false);
+        }, 3000);
+      } catch (e) {
+        console.error("Error completing goal: ", e);
+      }
     }
   };
 

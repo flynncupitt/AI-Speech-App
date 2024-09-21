@@ -1,5 +1,7 @@
 import React from "react";
 import Goal from "./Goal";
+import { doc, deleteDoc } from "firebase/firestore";
+import { firestore, auth } from "../config/firebaseconfig";
 
 interface GoalType {
   id: string;
@@ -22,16 +24,31 @@ const DonePage: React.FC<DonePageProps> = ({
   setGoals,
   setSuccessMessage,
 }) => {
-  const handleDeleteCompletedGoal = (id: string) => {
-    setGoals(doneGoals.filter((goal) => goal.id !== id));
+  const handleDeleteCompletedGoal = async (id: string) => {
+    const userId = auth.currentUser?.uid;
 
-    // Show the success message
-    setSuccessMessage("Completed goal deleted successfully!");
+    if (!userId) {
+      console.error("User not authenticated.");
+      return;
+    }
 
-    // Hide the message after 3 seconds
-    setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
+    try {
+      console.log("Deleting goal with ID:", id);
+
+      const goalRef = doc(firestore, `users/${userId}/goals`, id);
+
+      await deleteDoc(goalRef);
+
+      setGoals(doneGoals.filter((goal) => goal.id !== id));
+
+      setSuccessMessage("Completed goal deleted successfully!");
+
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
+    } catch (error) {
+      console.error("Error deleting goal: ", error);
+    }
   };
   return (
     <div className="p-4 w-full flex-grow">
