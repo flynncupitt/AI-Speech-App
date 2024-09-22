@@ -32,6 +32,7 @@ const WaveSurferPlayer = forwardRef(({ audioFile, onProgress }, ref) => {
         // Load the audio file
         wavesurfer.current.load(audioFile);
 
+
         // Function to immediately update progress
         const updateProgress = () => {
             const currentTime = wavesurfer.current.getCurrentTime();
@@ -62,7 +63,7 @@ const WaveSurferPlayer = forwardRef(({ audioFile, onProgress }, ref) => {
         // Handle play/pause button press
         wavesurfer.current.on('play', () => {
             updateProgress(); // Update immediately when play is triggered
-            intervalRef.current = setInterval(updateProgress, 500); // Move cursor every second
+            intervalRef.current = setInterval(updateProgress, 100); // Move cursor every second
         });
 
         wavesurfer.current.on('pause', () => {

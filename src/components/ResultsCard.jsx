@@ -9,10 +9,11 @@ export default function ResultsCard({ audioURL }) {
     const [isPlaying, setIsPlaying] = useState(false); 
     const [progress, setProgress] = useState(0); 
     const [duration, setDuration] = useState(0);
-  
-    const record = { recording: '1', mumbled: 3, filler: 2, stat: 0, wpm: 0 };
 
-    // Array of phrases
+    // Dummy data for record
+    const record = { recording: '1', mumbled: 3, filler: 2, stat: 0, wpm: 0 }; // mumbled and filler set to 0 for demo
+
+    // Phrases for motivational messages
     const phrases = [
       "Well Done!",
       "Great Job!",
@@ -21,21 +22,25 @@ export default function ResultsCard({ audioURL }) {
       "Excellent!"
     ];
 
-    // Randomly select a phrase
-    const getRandomMessage = () => {
+    // Conditionally select message based on mumbled and filler words
+    const getMessage = () => {
+      if (record.mumbled === 0 && record.filler === 0) {
+        return "Flawless Work!";
+      }
       const randomIndex = Math.floor(Math.random() * phrases.length);
       return phrases[randomIndex];
     };
 
-    // Set the message to a random phrase
-    const [message, setMessage] = useState(getRandomMessage());
+    // Set the message to the conditional result
+    const [message, setMessage] = useState(getMessage());
 
+    // Example shapes data (for visualizing segments in the progress bar)
     const shapes = [
-      { position: 10, duration: 10, type: 'mumbled' },
-      { position: 30, duration: 5, type: 'filler' },
-      { position: 50, duration: 7, type: 'mumbled' },
-      { position: 120, duration: 3, type: 'filler' },
-      { position: 240, duration: 4, type: 'mumbled' },
+      { position: 1, duration: 0.5, type: 'mumbled' },
+      { position: 6, duration: 3, type: 'mumbled' },
+      { position: 10, duration: 2, type: 'filler' },
+      { position: 15, duration: 2, type: 'mumbled' },
+      { position: 17, duration: 2, type: 'filler' },
     ];
   
     const getShapeColor = (type) => {
@@ -55,7 +60,7 @@ export default function ResultsCard({ audioURL }) {
         setIsPlaying(!isPlaying);
       }
     };
-  
+
     useEffect(() => {
       if (waveSurferRef.current) {
         const wavesurfer = waveSurferRef.current.getInstance();
@@ -64,16 +69,13 @@ export default function ResultsCard({ audioURL }) {
         });
       }
     }, []);
-  
-    useEffect(() => {
-      console.log(`Progress updated: ${progress}`);
-    }, [progress]);
-  
+
     return (
       <div className="NewResult">
-        <AudioVisualizer audioFile={audioURL} />  {/* Use passed audioURL */}
+        {/* AudioVisualizer using the passed audioURL */}
+        <AudioVisualizer audioFile={hellnah} />  
         <div className="Results">
-          <h1>{message}</h1>  {/* Display random message */}
+          <h1>{message}</h1>  {/* Display conditional message */}
           <div className="Stats">
             <div className="Mumbled">
               <h2>{record.mumbled}</h2>
@@ -94,9 +96,10 @@ export default function ResultsCard({ audioURL }) {
           </div>
         </div>
         <div style={{ maxWidth: '360px', margin: 'auto' }}>
+          {/* WaveSurferPlayer using the passed audioURL */}
           <WaveSurferPlayer
             ref={waveSurferRef}
-            audioFile={audioURL}  /* Use passed audioURL */
+            audioFile={audioURL} 
             onProgress={setProgress}
           />
         </div>
@@ -105,7 +108,6 @@ export default function ResultsCard({ audioURL }) {
             {shapes.map((shape, index) => {
               const leftPosition = (shape.position / duration) * 100;
               const shapeWidth = (shape.duration / duration) * 100;
-  
               return (
                 <div
                   key={index}
@@ -125,7 +127,7 @@ export default function ResultsCard({ audioURL }) {
                 margin: 'auto',
                 top: '-4px',
                 left: `${(progress * 100)}%`,
-                transition: 'left 0.5s linear',
+                transition: 'left 0.1s linear',
               }}
             ></div>
           </div>
