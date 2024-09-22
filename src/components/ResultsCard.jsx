@@ -73,7 +73,7 @@ export default function ResultsCard({ audioURL }) {
     return (
       <div className="NewResult">
         {/* AudioVisualizer using the passed audioURL */}
-        <AudioVisualizer audioFile={audioURL} />  
+        <AudioVisualizer audioFile={hellnah} />  
         <div className="Results">
           <h1>{message}</h1>  {/* Display conditional message */}
           <div className="Stats">
