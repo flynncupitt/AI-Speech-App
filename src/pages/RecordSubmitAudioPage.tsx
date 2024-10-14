@@ -4,6 +4,9 @@ import { uploadFileToFirebase } from "../utils/firebaseupload";
 import { firestore } from "../config/firebaseconfig"; // Import Firestore instance
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig"; // Import Firebase auth instance
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 export default function RecordSubmitAudioPage() {
   const [recordedUrl, setRecordedUrl] = useState("");
@@ -15,26 +18,69 @@ export default function RecordSubmitAudioPage() {
   const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showHighlightText, setShowHighlightText] = useState<boolean>(false);
+  const [showTranscriptArea, setShowTranscriptArea] = useState<boolean>(false);
   const [selectedPrompt, setSelectedPrompt] = useState<string>("");
+  const fillerWords = [
+    "um",
+    "uh",
+    "like",
+    "so",
+    "but",
+    "oh",
+    "basically",
+    "well",
+    "you know",
+  ];
+  const [highlightedText, setHighlightedText] = useState<JSX.Element | null>(
+    null
+  );
+
+  const highlightFillerWords = (text: string): JSX.Element => {
+    const words = text.split(" ");
+    return (
+      <span>
+        {words.map((word, index) => {
+          const isFiller = fillerWords.includes(word.toLowerCase());
+          return (
+            <span key={index} className={isFiller ? "bg-red-500" : ""}>
+              {word}{" "}
+            </span>
+          );
+        })}
+      </span>
+    );
+  };
 
   // Separate lists for short, medium, and long prompts
   const shortPrompts = [
     "The power of a smile in daily interactions",
     "Why morning routines set the tone for the day",
-    "The impact of gratitude on mental health"
+    "The impact of gratitude on mental health",
   ];
 
   const mediumPrompts = [
     "The role of social media in shaping modern communication",
     "How small habits lead to big changes",
-    "The importance of environmental conservation in urban areas"
+    "The importance of environmental conservation in urban areas",
   ];
 
   const longPrompts = [
     "The future of renewable energy and its global implications",
     "The evolution of education in a digital world",
-    "The psychological effects of working from home in a post-pandemic era"
+    "The psychological effects of working from home in a post-pandemic era",
   ];
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
 
   // Function to generate random file names
   const generateRandomFileName = (extension: string) => {
@@ -60,6 +106,10 @@ export default function RecordSubmitAudioPage() {
   };
 
   const startRecording = async () => {
+    setShowTranscriptArea(true);
+    resetTranscript();
+    setShowHighlightText(false);
+    SpeechRecognition.startListening({ continuous: true });
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStream.current = stream;
@@ -123,6 +173,9 @@ export default function RecordSubmitAudioPage() {
   };
 
   const stopRecording = () => {
+    SpeechRecognition.stopListening();
+    setShowHighlightText(true);
+    setHighlightedText(highlightFillerWords(transcript));
     if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
       mediaRecorder.current.stop();
     }
@@ -161,7 +214,9 @@ export default function RecordSubmitAudioPage() {
 
       <div className="bg-white shadow-md rounded-lg p-4 max-w-lg text-center">
         {selectedPrompt ? (
-          <p className="text-lg font-semibold text-gray-700">{selectedPrompt}</p>
+          <p className="text-lg font-semibold text-gray-700">
+            {selectedPrompt}
+          </p>
         ) : (
           <p className="text-gray-500">Select a prompt to begin</p>
         )}
@@ -172,6 +227,20 @@ export default function RecordSubmitAudioPage() {
       </div>
       {isRecording && (
         <RecordingStopwatch isRunning={isRecording}></RecordingStopwatch>
+      )}
+      {showTranscriptArea && (
+        <div className="flex flex-col items-center w-[90%] md:w-1/2 box-border">
+          <p>Your transcription</p>
+          <div className=" bg-navBar rounded-lg p-4">
+            <p>
+              {listening
+                ? transcript
+                : showHighlightText
+                ? highlightedText
+                : "Begin recording to see your transcript"}
+            </p>
+          </div>
+        </div>
       )}
       <div className="flex flex-grow items-center justify-center">
         <div className="relative w-20 h-20 flex items-center justify-center">
