@@ -40,7 +40,12 @@ const SomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <input type="file" onChange={handleFileChange} className="mb-4" />
+      <input
+        data-testid="file-input"
+        type="file"
+        onChange={handleFileChange}
+        className="mb-4"
+      />
       <button
         onClick={handleUpload}
         className="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4"
