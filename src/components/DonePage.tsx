@@ -53,7 +53,7 @@ const DonePage: React.FC<DonePageProps> = ({
   return (
     <div className="p-4 w-full flex-grow">
       {doneGoals.length > 0 ? (
-        doneGoals.map((goal, index) => (
+        doneGoals.map((goal) => (
           <Goal
             key={goal.id}
             goal={goal}

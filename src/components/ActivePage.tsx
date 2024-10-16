@@ -184,6 +184,7 @@ const ActivePage: React.FC<ActivePageProps> = ({
           setCharCount(0);
           setEditingGoalId(null);
         }}
+        data-testid="add-a-goal"
       >
         + Add a goal
       </div>
