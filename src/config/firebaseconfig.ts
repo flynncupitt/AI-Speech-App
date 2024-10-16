@@ -16,7 +16,7 @@ useEffect(() => {
 
 
 const firebaseConfig = {
-        apiKey: import.meta.env.VITE_API_KEY,
+        apiKey: "AIzaSyAu9fX-bfOdtdT_IRhCyKGcwct7ZWnrdEI" ,
         //apiKey: apiKey},
         authDomain: "ai-speech-app-82a66.firebaseapp.com",
         projectId: "ai-speech-app-82a66",
