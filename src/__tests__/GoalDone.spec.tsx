@@ -1,4 +1,4 @@
-// DonePage.spec.tsx
+// GoalDone.spec.tsx
 import {
   render,
   screen,
@@ -7,8 +7,7 @@ import {
   act,
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { deleteDoc, doc } from "firebase/firestore";
-import { firestore, auth } from "../config/firebaseconfig";
+import { deleteDoc } from "firebase/firestore";
 import DonePage from "../components/DonePage";
 import { onAuthStateChanged } from "firebase/auth";
 
