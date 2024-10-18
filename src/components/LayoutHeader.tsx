@@ -16,7 +16,7 @@ import logo from "../assets/app-logo.png";
 
 const userNavigation = [
   { name: "Your Profile", href: "/profile" },
-  { name: "Settings", href: "#" },
+  { name: "Settings", href: "/settings" },
 ];
 
 function classNames(...classes: string[]) {
@@ -98,15 +98,11 @@ export default function DashboardHeader() {
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-navBar">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8"> 
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <img
-                  alt="Clarity"
-                  src={logo}
-                  className="h-10 w-10"
-                />
+                <img alt="Clarity" src={logo} className="h-10 w-10" />
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
