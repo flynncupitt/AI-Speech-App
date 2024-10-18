@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { auth, storage } from "../config/firebaseconfig";
-import { onAuthStateChanged, updateProfile, User } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  updateProfile,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  User,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Import necessary Firebase Storage functions
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -12,6 +19,11 @@ export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordChangeError, setPasswordChangeError] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -47,18 +59,14 @@ export default function ProfilePage() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // Progress function
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setUploadProgress(progress);
-          console.log("Upload is " + progress + "% done");
         },
         (error) => {
-          // Error function
           console.error("Upload error:", error);
         },
         () => {
-          // Complete function
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             updateProfile(auth.currentUser!, {
               displayName,
@@ -77,10 +85,7 @@ export default function ProfilePage() {
         }
       );
     } else {
-      // If no new image is selected, just update the display name
-      updateProfile(auth.currentUser, {
-        displayName,
-      })
+      updateProfile(auth.currentUser, { displayName })
         .then(() => {
           alert("Profile updated successfully!");
         })
@@ -90,13 +95,39 @@ export default function ProfilePage() {
     }
   };
 
-  if (!user) return null; // or a loading indicator
+  const handlePasswordChange = () => {
+    if (!auth.currentUser || !currentPassword || !newPassword) return;
+
+    const credential = EmailAuthProvider.credential(
+      auth.currentUser.email!,
+      currentPassword
+    );
+
+    reauthenticateWithCredential(auth.currentUser, credential)
+      .then(() => {
+        updatePassword(auth.currentUser!, newPassword)
+          .then(() => {
+            alert("Password changed successfully!");
+            setCurrentPassword("");
+            setNewPassword("");
+          })
+          .catch((error) => {
+            console.error("Error changing password:", error);
+            setPasswordChangeError(error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Re-authentication failed:", error);
+        setPasswordChangeError("Current password is incorrect.");
+      });
+  };
+
+  if (!user) return null;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Your Profile</h1>
       <div className="flex flex-col space-y-4">
-        {/* Display Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Display Name
@@ -109,7 +140,6 @@ export default function ProfilePage() {
           />
         </div>
 
-        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Email (read-only)
@@ -122,7 +152,6 @@ export default function ProfilePage() {
           />
         </div>
 
-        {/* Profile Picture */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Profile Picture
@@ -135,7 +164,6 @@ export default function ProfilePage() {
             />
             <input type="file" accept="image/*" onChange={handleFileChange} />
           </div>
-          {/* Show upload progress if uploading */}
           {uploadProgress > 0 && (
             <div className="w-full bg-gray-200 rounded-full mt-2">
               <div
@@ -148,10 +176,44 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Update Button */}
+        <div className="border-t border-gray-200 pt-4">
+          <h2 className="text-xl font-semibold mb-2">Change Password</h2>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Current Password
+            </label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div className="mt-2">
+            <label className="block text-sm font-medium text-gray-700">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+          {passwordChangeError && (
+            <p className="text-red-500 text-sm mt-2">{passwordChangeError}</p>
+          )}
+          <button
+            onClick={handlePasswordChange}
+            className="mt-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            Change Password
+          </button>
+        </div>
+
         <button
           onClick={handleUpdateProfile}
-          className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+          className="mt-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
         >
           Update Profile
         </button>
