@@ -15,6 +15,7 @@ import GoalTrackerPage from "./pages/GoalTrackerPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
+import LandingPageLayout from "./components/LandingPageLayout";
 import ProfilePage from "./pages/ProfilePage";
 import ResultsPage from "./pages/ResultsPage";
 
@@ -40,12 +41,14 @@ const AppRoutes = () => {
           </Routes>
         </Layout>
       ) : (
-        <Routes>
-          {/* Put pages here that should not have the dashboard header (make sure path is in noLayoutRoutes too) */}
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/register" element={<RegisterPage />}></Route>
-          <Route path="/login" element={<LoginPage />}></Route>
-        </Routes>
+        <LandingPageLayout>
+          <Routes>
+            {/* Put pages here that should not have the dashboard header (make sure path is in noLayoutRoutes too) */}
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+          </Routes>
+        </LandingPageLayout>
       )}
     </>
   );
