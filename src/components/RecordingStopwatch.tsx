@@ -28,9 +28,6 @@ const RecordingStopwatch: React.FC<Props> = ({ isRunning }) => {
   //     setIsRunning(!Props.isRunning);
   //   };
 
-  const reset = () => {
-    setTime(0);
-  };
   return (
     <div className="stopwatch-container">
       <p className="stopwatch-time">

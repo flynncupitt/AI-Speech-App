@@ -6,7 +6,7 @@ interface NavBarProps {
 }
 
 function NavBar({ brandName, imageSrcPath }: NavBarProps) {
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [] = useState(-1);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -63,8 +63,15 @@ function NavBar({ brandName, imageSrcPath }: NavBarProps) {
       </div>
       {isOpen && (
         <div className="md:hidden bg-navBar text-white py-2 px-4">
-          <a href="/register" className="block py-2 hover:bg-gray-700 rounded-md">Register</a>
-          <a href="/login" className="block py-2 hover:bg-gray-700 rounded-md">Login</a>
+          <a
+            href="/register"
+            className="block py-2 hover:bg-gray-700 rounded-md"
+          >
+            Register
+          </a>
+          <a href="/login" className="block py-2 hover:bg-gray-700 rounded-md">
+            Login
+          </a>
         </div>
       )}
     </nav>

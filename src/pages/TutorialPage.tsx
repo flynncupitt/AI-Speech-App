@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TutorialStep } from "../components/TutorialStep";
-import logo from "../assets/app-logo.png";
 import tutPrompt from "../assets/tutPrompt.png";
 import tutRec from "../assets/tutRec.png";
 import tutReview from "../assets/tutReview.png";

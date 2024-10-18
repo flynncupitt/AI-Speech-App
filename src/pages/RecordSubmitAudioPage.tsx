@@ -14,8 +14,8 @@ export default function RecordSubmitAudioPage() {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [downloadURL, setDownloadURL] = useState<string | null>(null);
+  const [] = useState<File | null>(null);
+  const [, setDownloadURL] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showHighlightText, setShowHighlightText] = useState<boolean>(false);
