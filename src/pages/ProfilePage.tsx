@@ -46,174 +46,171 @@ export default function ProfilePage() {
     }
   };
 
-  const handleUpdateProfile = () => {
+  const handleUpdateProfile = async () => {
     if (!auth.currentUser) return;
 
-    if (profileImageFile) {
-      const storageRef = ref(
-        storage,
-        `profilePictures/${auth.currentUser.uid}/${profileImageFile.name}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, profileImageFile);
+    try {
+      if (profileImageFile) {
+        const storageRef = ref(
+          storage,
+          `profilePictures/${auth.currentUser.uid}/${profileImageFile.name}`
+        );
+        const uploadTask = uploadBytesResumable(storageRef, profileImageFile);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-        },
-        (error) => {
-          console.error("Upload error:", error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            updateProfile(auth.currentUser!, {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress);
+          },
+          (error) => console.error("Upload error:", error),
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            await updateProfile(auth.currentUser!, {
               displayName,
               photoURL: downloadURL,
-            })
-              .then(() => {
-                setPhotoURL(downloadURL);
-                alert("Profile updated successfully!");
-                setUploadProgress(0);
-                setProfileImageFile(null);
-              })
-              .catch((error) => {
-                console.error("Error updating profile:", error);
-              });
-          });
-        }
-      );
-    } else {
-      updateProfile(auth.currentUser, { displayName })
-        .then(() => {
-          alert("Profile updated successfully!");
-        })
-        .catch((error) => {
-          console.error("Error updating profile:", error);
-        });
+            });
+            setPhotoURL(downloadURL);
+            alert("Profile updated successfully!");
+            setUploadProgress(0);
+            setProfileImageFile(null);
+          }
+        );
+      } else {
+        await updateProfile(auth.currentUser, { displayName });
+        alert("Profile updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
     }
   };
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (!auth.currentUser || !currentPassword || !newPassword) return;
 
-    const credential = EmailAuthProvider.credential(
-      auth.currentUser.email!,
-      currentPassword
-    );
-
-    reauthenticateWithCredential(auth.currentUser, credential)
-      .then(() => {
-        updatePassword(auth.currentUser!, newPassword)
-          .then(() => {
-            alert("Password changed successfully!");
-            setCurrentPassword("");
-            setNewPassword("");
-          })
-          .catch((error) => {
-            console.error("Error changing password:", error);
-            setPasswordChangeError(error.message);
-          });
-      })
-      .catch((error) => {
-        console.error("Re-authentication failed:", error);
-        setPasswordChangeError("Current password is incorrect.");
-      });
+    try {
+      const credential = EmailAuthProvider.credential(
+        auth.currentUser.email!,
+        currentPassword
+      );
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      await updatePassword(auth.currentUser, newPassword);
+      alert("Password changed successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+    } catch (error) {
+      console.error("Error changing password:", error);
+      if (error instanceof Error) {
+        setPasswordChangeError(error.message);
+      } else {
+        setPasswordChangeError("Failed to change the password. Try again.");
+      }
+    }
   };
 
   if (!user) return null;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Your Profile</h1>
-      <div className="flex flex-col space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Display Name
-          </label>
-          <input
-            type="text"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Email (read-only)
-          </label>
-          <input
-            type="email"
-            value={email}
-            readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Profile Picture
-          </label>
-          <div className="flex items-center space-x-4">
+    <div className="min-h-screen bg-[#2B2D42] flex items-start justify-center p-6 pt-20 overflow-hidden">
+      <div className="bg-[#8D99AE] shadow-md rounded-lg w-full max-w-3xl p-8">
+        <h1 className="text-3xl font-bold text-[#EDF2F4] mb-6 text-center">
+          Your Profile
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Profile Picture */}
+          <div className="text-center">
             <img
               src={photoURL || "https://via.placeholder.com/150"}
               alt="Profile"
-              className="h-16 w-16 rounded-full object-cover"
+              className="h-32 w-32 mx-auto rounded-full object-cover mb-4"
             />
             <input type="file" accept="image/*" onChange={handleFileChange} />
-          </div>
-          {uploadProgress > 0 && (
-            <div className="w-full bg-gray-200 rounded-full mt-2">
-              <div
-                className="bg-indigo-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                style={{ width: `${uploadProgress}%` }}
-              >
-                {uploadProgress.toFixed(0)}%
+            {uploadProgress > 0 && (
+              <div className="w-full bg-gray-200 rounded-full mt-2">
+                <div
+                  className="bg-indigo-600 text-xs text-white p-0.5 rounded-full"
+                  style={{ width: `${uploadProgress}%` }}
+                >
+                  {uploadProgress.toFixed(0)}%
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Profile Details */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[#EDF2F4]">
+                Display Name
+              </label>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
-          )}
+
+            <div>
+              <label className="block text-sm font-medium text-[#EDF2F4]">
+                Email (read-only)
+              </label>
+              <input
+                type="email"
+                value={email}
+                readOnly
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-4">
-          <h2 className="text-xl font-semibold mb-2">Change Password</h2>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Current Password
-            </label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div className="mt-2">
-            <label className="block text-sm font-medium text-gray-700">
-              New Password
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
+        {/* Change Password Section */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold text-[#EDF2F4]">
+            Change Password
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div>
+              <label className="block text-sm font-medium text-[#EDF2F4]">
+                Current Password
+              </label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#EDF2F4]">
+                New Password
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
           </div>
           {passwordChangeError && (
             <p className="text-red-500 text-sm mt-2">{passwordChangeError}</p>
           )}
           <button
             onClick={handlePasswordChange}
-            className="mt-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+            className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md"
           >
             Change Password
           </button>
         </div>
 
+        {/* Update Profile Button */}
         <button
           onClick={handleUpdateProfile}
-          className="mt-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+          className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md"
         >
           Update Profile
         </button>
