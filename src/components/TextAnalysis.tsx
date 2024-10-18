@@ -1,10 +1,6 @@
-
-
 //EXAMPLE WORK THAT COULD BE IMPLEMENTED IF NEEDED
 
-
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useState } from "react";
 
 const TextAnalysis = () => {
   const [text, setText] = useState("");

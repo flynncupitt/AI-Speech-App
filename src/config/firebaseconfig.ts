@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
 
 /* const [apiKey, setApiKey] = useState<string | null>(null);
 useEffect(() => {
