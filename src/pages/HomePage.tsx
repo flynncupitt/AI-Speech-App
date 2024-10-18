@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import imagePath from "../assets/app-logo.png";
 import NavBar from "../components/NavBar.tsx";
 
@@ -15,7 +15,12 @@ export default function HomePage() {
 
       setTimeout(() => {
         setTitle1((prev) => titles[(titles.indexOf(prev) + 1) % titles.length]);
-        setTitle2((prev) => highlightedWords[(highlightedWords.indexOf(prev) + 1) % highlightedWords.length]);
+        setTitle2(
+          (prev) =>
+            highlightedWords[
+              (highlightedWords.indexOf(prev) + 1) % highlightedWords.length
+            ]
+        );
         setFade(true);
       }, 400);
     }, 4000);
@@ -25,15 +30,16 @@ export default function HomePage() {
 
   return (
     <div className="bg-[#18151c] min-h-screen text-white">
-      <NavBar
-        brandName="Clarity"
-        imageSrcPath={imagePath}
-      />
+      <NavBar brandName="Clarity" imageSrcPath={imagePath} />
       <section className="hero-section py-32 px-6 flex items-center justify-center">
         <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
           <div className="md:w-1/2 order-2 md:order-1 text-center md:text-left space-y-6">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">
-              <span className={`transition-opacity duration-500 ${fade ? "opacity-100" : "opacity-0"}`}>
+              <span
+                className={`transition-opacity duration-500 ${
+                  fade ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 {title1} <span className="text-primary">{title2}</span>
               </span>
             </h1>

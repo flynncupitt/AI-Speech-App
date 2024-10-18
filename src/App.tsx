@@ -15,8 +15,10 @@ import GoalTrackerPage from "./pages/GoalTrackerPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
+import LandingPageLayout from "./components/LandingPageLayout";
 import ProfilePage from "./pages/ProfilePage";
 import ResultsPage from "./pages/ResultsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -37,15 +39,18 @@ const AppRoutes = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/goal-tracker" element={<GoalTrackerPage />} />
             <Route path="/results" element={<ResultsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </Layout>
       ) : (
-        <Routes>
-          {/* Put pages here that should not have the dashboard header (make sure path is in noLayoutRoutes too) */}
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/register" element={<RegisterPage />}></Route>
-          <Route path="/login" element={<LoginPage />}></Route>
-        </Routes>
+        <LandingPageLayout>
+          <Routes>
+            {/* Put pages here that should not have the dashboard header (make sure path is in noLayoutRoutes too) */}
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+          </Routes>
+        </LandingPageLayout>
       )}
     </>
   );

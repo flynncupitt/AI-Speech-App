@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { firestore } from "../config/firebaseconfig";
 import { collection, getDocs } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export const UserDashboard = () => {
   const [recordingsCount, setRecordingsCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
