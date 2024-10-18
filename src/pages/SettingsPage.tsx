@@ -7,6 +7,7 @@ import {
   EmailAuthProvider,
   User,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import {
   getFirestore,
   collection,
@@ -16,8 +17,6 @@ import {
 
 const db = getFirestore();
 
-import { useNavigate } from "react-router-dom";
-
 export default function SettingsPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -26,6 +25,7 @@ export default function SettingsPage() {
   const [dataDeletionError, setDataDeletionError] = useState<string | null>(
     null
   );
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -38,32 +38,6 @@ export default function SettingsPage() {
 
     return () => unsubscribe();
   }, [navigate]);
-
-  const handleDeleteAccount = async () => {
-    if (!auth.currentUser || !currentPassword) return;
-
-    try {
-      const credential = EmailAuthProvider.credential(
-        auth.currentUser.email!,
-        currentPassword
-      );
-
-      // Re-authenticate the user
-      await reauthenticateWithCredential(auth.currentUser, credential);
-
-      // Delete the user account
-      await deleteUser(auth.currentUser);
-      alert("Account deleted successfully.");
-      navigate("/login");
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      if (error instanceof Error) {
-        setDeleteError(error.message);
-      } else {
-        setDeleteError("Failed to delete the account. Try again.");
-      }
-    }
-  };
 
   const handleDeleteData = async () => {
     if (!auth.currentUser) return;
@@ -88,6 +62,7 @@ export default function SettingsPage() {
       await Promise.all(deleteRecordingsPromises);
 
       alert("All user data has been deleted.");
+      setIsModalOpen(false); // Close the modal after success
     } catch (error) {
       console.error("Error deleting data:", error);
       if (error instanceof Error) {
@@ -97,6 +72,30 @@ export default function SettingsPage() {
       }
     }
   };
+
+  const handleDeleteAccount = async () => {
+    if (!auth.currentUser || !currentPassword) return;
+
+    try {
+      const credential = EmailAuthProvider.credential(
+        auth.currentUser.email!,
+        currentPassword
+      );
+
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      await deleteUser(auth.currentUser);
+      alert("Account deleted successfully.");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      if (error instanceof Error) {
+        setDeleteError(error.message);
+      } else {
+        setDeleteError("Failed to delete the account. Try again.");
+      }
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -120,7 +119,7 @@ export default function SettingsPage() {
               <p className="text-red-500 text-sm mb-4">{dataDeletionError}</p>
             )}
             <button
-              onClick={handleDeleteData}
+              onClick={() => setIsModalOpen(true)} // Open modal on click
               className="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md"
             >
               Delete Data
@@ -158,6 +157,35 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Confirm Data Deletion
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete all your data? This action cannot
+              be undone.
+            </p>
+            <div className="flex space-x-4">
+              <button
+                onClick={handleDeleteData}
+                className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)} // Close the modal
+                className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
