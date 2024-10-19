@@ -24,7 +24,7 @@ const AppRoutes = () => {
   const location = useLocation();
 
   // Define the routes that should not have the layout
-  const noLayoutRoutes = ["/", "/register", "/login"];
+  const noLayoutRoutes = ["/", "/register", "/login", "/profile"];
 
   return (
     <>
@@ -36,7 +36,7 @@ const AppRoutes = () => {
             <Route path="/recordings" element={<RecordingsPage />}></Route>
             <Route path="/tutorial" element={<TutorialPage />}></Route>
             <Route path="/dashboard" element={<UserDashboard />}></Route>
-            <Route path="/profile" element={<ProfilePage />} />
+
             <Route path="/goal-tracker" element={<GoalTrackerPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
@@ -47,6 +47,7 @@ const AppRoutes = () => {
           <Routes>
             {/* Put pages here that should not have the dashboard header (make sure path is in noLayoutRoutes too) */}
             <Route path="/" element={<HomePage />}></Route>
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/register" element={<RegisterPage />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
           </Routes>

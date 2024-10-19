@@ -173,24 +173,32 @@ export default function ProfilePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <div>
-              <label className="block text-sm font-medium text-[#EDF2F4]">
+              <label
+                htmlFor="current-password"
+                className="block text-sm font-medium text-[#EDF2F4]"
+              >
                 Current Password
               </label>
               <input
                 type="password"
                 value={currentPassword}
+                data-testid="CurrentPassword"
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#EDF2F4]">
+              <label
+                htmlFor="new-password"
+                className="block text-sm font-medium text-[#EDF2F4]"
+              >
                 New Password
               </label>
               <input
                 type="password"
                 value={newPassword}
+                data-testid="NewPassword"
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
@@ -202,6 +210,7 @@ export default function ProfilePage() {
           <button
             onClick={handlePasswordChange}
             className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md"
+            data-testid="ChangePassword"
           >
             Change Password
           </button>
