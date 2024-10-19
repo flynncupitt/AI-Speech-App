@@ -11,16 +11,18 @@ import "./App.css";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import RecordingsPage from "./pages/RecordingsPage";
+import GoalTrackerPage from "./pages/GoalTrackerPage";
 import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
+import ProfilePage from "./pages/ProfilePage";
 import ResultsPage from "./pages/ResultsPage";
 
 const AppRoutes = () => {
   const location = useLocation();
-  
+
   // Define the routes that should not have the layout
-  const noLayoutRoutes = ['/','/register', '/login'];
+  const noLayoutRoutes = ["/", "/register", "/login"];
 
   return (
     <>
@@ -32,6 +34,8 @@ const AppRoutes = () => {
             <Route path="/recordings" element={<RecordingsPage />}></Route>
             <Route path="/tutorial" element={<TutorialPage />}></Route>
             <Route path="/dashboard" element={<UserDashboard />}></Route>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/goal-tracker" element={<GoalTrackerPage />} />
             <Route path="/results" element={<ResultsPage />} />
           </Routes>
         </Layout>
@@ -45,7 +49,7 @@ const AppRoutes = () => {
       )}
     </>
   );
-}
+};
 
 function App() {
   return (

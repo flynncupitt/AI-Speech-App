@@ -15,12 +15,48 @@ export default function RecordSubmitAudioPage() {
   const [downloadURL, setDownloadURL] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedPrompt, setSelectedPrompt] = useState<string>("");
+
+  // Separate lists for short, medium, and long prompts
+  const shortPrompts = [
+    "The power of a smile in daily interactions",
+    "Why morning routines set the tone for the day",
+    "The impact of gratitude on mental health"
+  ];
+
+  const mediumPrompts = [
+    "The role of social media in shaping modern communication",
+    "How small habits lead to big changes",
+    "The importance of environmental conservation in urban areas"
+  ];
+
+  const longPrompts = [
+    "The future of renewable energy and its global implications",
+    "The evolution of education in a digital world",
+    "The psychological effects of working from home in a post-pandemic era"
+  ];
 
   // Function to generate random file names
   const generateRandomFileName = (extension: string) => {
     const randomString = Math.random().toString(36).substring(2, 15);
     const timestamp = Date.now();
     return `recording_${randomString}_${timestamp}.${extension}`;
+  };
+
+  // Function to handle generating a random prompt based on type
+  const generateRandomPrompt = (type: "short" | "medium" | "long") => {
+    let selectedList: string[] = [];
+    if (type === "short") {
+      selectedList = shortPrompts;
+    } else if (type === "medium") {
+      selectedList = mediumPrompts;
+    } else if (type === "long") {
+      selectedList = longPrompts;
+    }
+
+    const randomPrompt =
+      selectedList[Math.floor(Math.random() * selectedList.length)];
+    setSelectedPrompt(randomPrompt);
   };
 
   const startRecording = async () => {
@@ -98,9 +134,40 @@ export default function RecordSubmitAudioPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <p className="flex-grow text-xl">My chosen prompt</p>
-      <div className="flex-grow">
+    <div className="flex flex-col h-[90vh] items-center justify-center">
+      <p className="text-xl">Select prompt type</p>
+
+      {/* Buttons to choose prompt type */}
+      <div className="mb-4 flex space-x-4">
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+          onClick={() => generateRandomPrompt("short")}
+        >
+          Short
+        </button>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+          onClick={() => generateRandomPrompt("medium")}
+        >
+          Medium
+        </button>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+          onClick={() => generateRandomPrompt("long")}
+        >
+          Long
+        </button>
+      </div>
+
+      <div className="bg-white shadow-md rounded-lg p-4 max-w-lg text-center">
+        {selectedPrompt ? (
+          <p className="text-lg font-semibold text-gray-700">{selectedPrompt}</p>
+        ) : (
+          <p className="text-gray-500">Select a prompt to begin</p>
+        )}
+      </div>
+
+      <div className="flex-grow pt-4">
         <audio controls src={recordedUrl} />
       </div>
       {isRecording && (
@@ -109,7 +176,7 @@ export default function RecordSubmitAudioPage() {
       <div className="flex flex-grow items-center justify-center">
         <div className="relative w-20 h-20 flex items-center justify-center">
           <button
-            className={`bg-purple-600 ${isRecording ? "h-10" : "h-16"} ${
+            className={`bg-primary ${isRecording ? "h-10" : "h-16"} ${
               isRecording ? "w-10" : "w-16"
             } ${
               isRecording ? "rounded-lg" : "rounded-full"
