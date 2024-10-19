@@ -4,15 +4,21 @@ import { collection, getDocs } from "firebase/firestore";
 import { auth } from "../config/firebaseconfig"; // Firebase auth instance
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom"; // For redirecting and navigation
+import ShareResults from '../components/ShareResults.tsx';
 
 const UserRecordings: React.FC = () => {
   const [recordings, setRecordings] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // To manage loading state
+  const [username, setUsername] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+
+        const displayName = user.displayName || user.email;
+        setUsername(displayName);
+
         try {
           const recordingsRef = collection(
             firestore,
@@ -77,6 +83,14 @@ const UserRecordings: React.FC = () => {
               >
                 View Results
               </button>
+              <ShareResults
+                username={username ?? "Unknown User"}
+                filename={recording.filename}
+                mumbledWords={3}
+                fillerWords={2}
+                stats={0}
+                wordsPerMinute={150}
+              />
             </li>
           ))
         ) : (
@@ -86,5 +100,8 @@ const UserRecordings: React.FC = () => {
     </div>
   );
 };
+
+
+
 
 export default UserRecordings;
