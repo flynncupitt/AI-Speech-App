@@ -16,6 +16,7 @@ import { TutorialPage } from "./pages/TutorialPage";
 import { UserDashboard } from "./pages/UserDashboard";
 import Layout from "./components/Layout";
 import LandingPageLayout from "./components/LandingPageLayout";
+import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
 import ResultsPage from "./pages/ResultsPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -40,6 +41,7 @@ const AppRoutes = () => {
             <Route path="/goal-tracker" element={<GoalTrackerPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="*" element={<NotFoundPage />} /> {/* 404 fallback */}
           </Routes>
         </Layout>
       ) : (

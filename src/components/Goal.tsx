@@ -24,19 +24,22 @@ const Goal: React.FC<GoalProps> = ({
   onDelete,
   isCompleted,
 }) => {
+  // Track which tasks are completed for this goal
   const [completedTasks, setCompletedTasks] = useState<boolean[]>(
     goal.completedTasks || new Array(goal.tasks.length).fill(false)
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false); //toggle the 3-dot menu
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null); // Detect clicks outside of the 3-dot menu to close it
 
+  // Handle task completion toggle
   const handleTaskCompletion = (index: number) => {
-    const updatedTasks = [...completedTasks];
+    const updatedTasks = [...completedTasks]; // Copy the tasks
     updatedTasks[index] = !updatedTasks[index];
-    setCompletedTasks(updatedTasks);
+    setCompletedTasks(updatedTasks); // Update the state with the new task completion status
   };
 
+  // Close the 3-dot menu if user clicks outside of it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -51,12 +54,16 @@ const Goal: React.FC<GoalProps> = ({
     };
   }, [menuRef]);
 
+  // Calculate the number of completed tasks
   const completedCount = completedTasks.filter(Boolean).length;
+
+  // Calculate the percentage of completed tasks
   const progressPercentage = Math.round((completedCount / goal.total) * 100);
 
   // Check if all tasks are completed
   const areAllTasksCompleted = completedTasks.every((task) => task);
 
+  // Check if all tasks are done so the goal can be marked as complete
   const handleCompleteClick = () => {
     if (goal.tasks.length > 0 && !areAllTasksCompleted) {
       // If there are tasks and not all tasks are completed, show an error
@@ -108,16 +115,19 @@ const Goal: React.FC<GoalProps> = ({
           </div>
         </div>
 
+        {/* Goal description */}
         <p className="text-sm mb-2 break-words overflow-hidden">
           {goal.description}
         </p>
 
+        {/* Display task progress count */}
         {goal.tasks.length > 0 && (
           <div className="text-sm mb-2">
             {completedCount} / {goal.total} ({progressPercentage}%)
           </div>
         )}
 
+        {/* Display task list with checkboxes */}
         {goal.tasks.length > 0 && (
           <div className="mb-2">
             {goal.tasks.map((task, index) => (
@@ -134,10 +144,12 @@ const Goal: React.FC<GoalProps> = ({
           </div>
         )}
 
+        {/* Display error message if present */}
         {errorMessage && (
           <div className="text-red-500 mb-2">{errorMessage}</div>
         )}
 
+        {/* Completion button */}
         <div className="flex justify-between items-center">
           <button
             className={`px-3 py-1 ${
