@@ -30,27 +30,23 @@ This web application is designed to help users improve their speech skills throu
 
 To run this project locally, follow these steps:
 
-Clone the repository:
-1. Copy code
+1. Clone the repository:
 ```
 git clone https://github.com/flynncupitt/AI-Speech-App
 ```
 
 2. Navigate to the project directory:
-Copy code
 ```
 cd AI-Speech-App
 ```
 
 3. Install the required dependencies:
-Copy code
 ```
 npm install
 ```
 
 4. Create a .env file with the necessary details (provided by the project owner).
 Start the development server:
-Copy code
 ```
 npm run dev
 ```
