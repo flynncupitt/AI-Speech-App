@@ -9,17 +9,51 @@ This web application is designed to help users improve their speech skills throu
 - Login/Sign Up
 - Generated promopts to speak
 - Record Speech
-- Speech Analysed by AI model
+- Speech Analysed by AI model (Not implemented)
 - Given Feedback/Stats for improvement
 
 ## Technologies Used
 
-- React JS _version: 18.2.0_
-- Firebase Auth _version: 23.0.0_
-- Tail Wind _version: 3.4_
-- React-audio-voice-recorder _version: 2.2.0_
-- ONNX _version: 1.16.2_
-- Hugging Face _version: 4.44.0_
+- React JS (version: 18.3.1)
+- Firebase Auth (version: 10.13.0)
+- Tailwind CSS (version: 3.4.10)
+- React-audio-voice-recorder (version: 2.2.0)
+- React Router DOM (version: 6.26.1)
+- React Speech Recognition (version: 3.10.0)
+- UUID (version: 10.0.0)
+- Babel Runtime (version: 7.25.7)
+- PostCSS (version: 8.4.41)
+- TypeScript (version: 5.5.3)
+- Vite (version: 5.4.6)
+
+Installation and Usage
+
+To run this project locally, follow these steps:
+
+Clone the repository:
+1. Copy code
+```
+git clone https://github.com/flynncupitt/AI-Speech-App
+```
+
+2. Navigate to the project directory:
+Copy code
+```
+cd AI-Speech-App
+```
+
+3. Install the required dependencies:
+Copy code
+```
+npm install
+```
+
+4. Create a .env file with the necessary details (provided by the project owner).
+Start the development server:
+Copy code
+```
+npm run dev
+```
 
 ## Team members
 
