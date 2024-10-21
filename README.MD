@@ -26,7 +26,7 @@ This web application is designed to help users improve their speech skills throu
 - TypeScript (version: 5.5.3)
 - Vite (version: 5.4.6)
 
-Installation and Usage
+## Installation and Usage
 
 To run this project locally, follow these steps:
 
