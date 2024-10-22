@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './ResultsCard.css';
-import hellnah from '../assets/Tyler The Creator - SIKE Sound Effect.mp3';
+import hellnah from '../assets/verynice.wav';
 import WaveSurferPlayer from './WaveSurferPlayer.jsx';
 import AudioVisualizer from './AudioVisualizer.jsx';
 
